@@ -1,5 +1,5 @@
 import express from 'express';
-import User from '../database/models/index.js'
+import User, {Character} from '../database/models/index.js'
 import sha256 from 'sha256';
 
 // Express Router is a class which helps us to create router handlers. It also can extend this routing to handle validation, handle 404 or other errors, etc.
@@ -16,7 +16,19 @@ const userController = express.Router();
  * retrieve and display all Users in the User Model
  */
 userController.get('/', (req, res) => {
-  User.find({}, (err, result) => {
+  User.find({name:'Mary'}, (err, result) => {
+    res.status(200).json({
+      data: result
+    });
+  });
+});
+
+/**
+ * GET/
+ * retrieve and display all Users in the User Model
+ */
+ userController.get('/character', (req, res) => {
+  Character.find({}, (err, result) => {
     res.status(200).json({
       data: result
     });
