@@ -6,7 +6,11 @@ const Schema = mongoose.Schema;
 // console.log(mongoose);
 
 const userSchema = new Schema({
-  email: { type: String, required: true },
+  email: { 
+    type: String, 
+    required: true,
+    lowercase: true,
+   },
   hashedPassword: { type: String, required: true },
   pokemons: [Number],
   berries: {
@@ -14,12 +18,12 @@ const userSchema = new Schema({
     default: 0
   },
   // currentMood: '', // string or array? image and text.  maybe ID. to reference other collection.
-  weeklyPokemon: [{
+  weeklyGraph: [{
     pokemon: String,
     position: Number,
     date: Date,
   }],
-  weeklyProgress: [{
+  weeklyStats: [{
     sessionCount: Number,
     cycleCount: Number,
     taskCompletionCount: Number,
@@ -39,7 +43,11 @@ const userSchema = new Schema({
   //         completed: Boolean,
   //         timeSpent: Number,
   //     }
-  // }]
+  // }],
+  updatedAt: {
+    type: Date,
+    default: () => Date.now(),
+  }
 });
 
 /**

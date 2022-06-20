@@ -1,6 +1,5 @@
 import express from 'express';
 import passport from 'passport';
-import sha256 from 'sha256';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import User from '../models/index.js';

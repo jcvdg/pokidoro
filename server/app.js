@@ -8,7 +8,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { applyPassportStrategy } from './store/passport.js';
 // import { userController } from './controller';
-import userController from './controller/user.controller.js';
+// import userController from './controller/user.controller.js';
+import { userController, pomodoroController } from './controller/index.js';
+// import  from './controller/pomodoro.controller.js';
 dotenv.config();
 
 // Connect to the database
@@ -36,6 +38,7 @@ applyPassportStrategy(passport);
 
 // use all controllers(APIs) here
 app.use('/', userController);
+app.use('/', pomodoroController);
 
 // Start Server here
 app.listen(8080, () => {
