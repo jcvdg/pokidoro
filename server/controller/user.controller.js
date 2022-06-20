@@ -108,7 +108,6 @@ userController.post('/register', registerValidation, async (req, res) => {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       const userId = user.id;
-      // console.log('userId ',userId);
 
       if (user && user.email) {
         const isPasswordMatched = user.comparePassword(password);
