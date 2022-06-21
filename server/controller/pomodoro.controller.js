@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
-import sha256 from 'sha256';
 import User from '../models/index.js';
+import Pokedex from '../models/index.js';
 
 
 const pomodoroController = express.Router();
@@ -95,25 +95,48 @@ const events = []
 
 // randomly determines an event for after user completes a pomodoro session.
 pomodoroController.get(
-  '/getEvent',
+  '/event',
   passport.authenticate('jwt', {session: false}),
-  (req, res) => {
-    // get a random event: new pokemon, levelup existing pokemon, get a berry
-    const event = Math.floor(Math.random()*9);
-    switch(event){
-      // get a berrie
-      case (event < 5):
+  async (req, res) => {
+    try {
+      // get a random event: new pokemon, levelup existing pokemon, get a berry
+      const events = 
+        {
+          GET_BERRIES: 5,
+          GET_POKEMON: 7,
+          EVOLVE: 9,
+        };
+      // check if user has any pokemon with evolve: true
+      let eventsIncludes;
+      let count = await Pokedex.count();
+      console.log('count', User.aggregate())
+      let user = await User.findById(req.user._id).populate("pokemons");
 
-        break;
+      console.log(user)
 
-      // get a pokemon
-      case (event < 7):
-        
-        break;
+      const event = Math.floor(Math.random()*9);
+      switch(event){
+        // get a berrie
+        case (event < events['GET_BERRIES']):
 
-      // levelup a Pokemon
-      default:
+          break;
+  
+        // get a pokemon
+        case (event < events['GET_POKEMON']):
+          
+          break;
+  
+        // levelup a Pokemon
+        case ( event < events['EVOLVE']):
 
+          break;
+        default:
+          break;
+  
+      }
+
+    } catch (e) {
+      console.log(e.message);
     }
 
     res.status(200).json({

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import sha256 from 'sha256';
+import Pokedex from './pokedex.js';
 
 const Schema = mongoose.Schema;
 
@@ -12,7 +13,11 @@ const userSchema = new Schema({
     lowercase: true,
    },
   hashedPassword: { type: String, required: true },
-  pokemons: [Number],
+  pokemons: [{
+    // type: Number,
+    type: Schema.Types.ObjectId,
+    ref: 'pokedex',
+  }],
   berries: {
     type: Number,
     default: 0

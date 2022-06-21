@@ -10,6 +10,7 @@ import { applyPassportStrategy } from './store/passport.js';
 // import { userController } from './controller';
 // import userController from './controller/user.controller.js';
 import { userController, pomodoroController } from './controller/index.js';
+import { populatePokedex } from './store/populatePokedex.js'
 // import  from './controller/pomodoro.controller.js';
 dotenv.config();
 
@@ -24,6 +25,10 @@ db.once('open', () => {
 db.on('error', (err) => {
   console.error('connection error:', err);
 });
+
+// Fetches pokemon data from pokeapi
+// should only be executed once when the project is first run.
+populatePokedex();
 
 // Init an Express App.
 const app = express();

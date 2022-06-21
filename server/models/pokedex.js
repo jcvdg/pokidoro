@@ -1,17 +1,22 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const pokedex = new Schema({
-  pokemon: {
-    id: { type: Number, unique: true} ,
+const Pokemon = new Schema( 
+  {
     name: String,
-    description: String,
+    pokemonId: Number,
     image: {
       small: String,
       large: String
     }
   }
-});
+);
+
+const pokedex = new Schema(
+  {
+    all: [ Pokemon ]
+  } ,
+);
 
 const Pokedex = mongoose.model('Pokedex', pokedex);
 
