@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import User from '../models/index.js';
+import User, { Pokemons } from '../models/index.js';
 
 
 const pomodoroController = express.Router();
@@ -147,40 +147,48 @@ pomodoroController.get(
 );
 
 //temporary api
+// get new pokemon
 pomodoroController.put(
-  '/pokemon', 
+  '/newpokemon', 
   passport.authenticate('jwt', {session: false}),
   async (req,res) => {
     try {
-      // get a random pokemon
-      // check if user has the pokemon
+      let randomPokemonId;
+      let userPokemonIds = [];
+      const userid = req.user._id;
+      const user = await User.findById(userid)
+        .populate('pokemons')
+        .exec();
+        // console.log(user);
+        // console.log('populated user: ', user);
+        userPokemonIds = user.pokemons.map( x => x.pokemonId)
+        // console.log('pokemons: ', userPokemonIds)
 
+        // get a pokemon that the user doesn't already have
+        do {
+          randomPokemonId = Math.ceil(Math.random()*151);
+          // console.log('randomPokemon: ', randomPokemonId)
+        } while( userPokemonIds.includes(randomPokemonId) )
 
-
-    const userid = req.user._id
-    
-    const user = await User.findById(userid)
-      .populate('pokemons')
-      .exec ( (err, user) => {
-        if(err) console.log(err);
-        console.log('populated user: ', user);
-        res.json(user);
-      });
-
-
+        console.log('we\'re getting ', randomPokemonId)
       
-
-      // if the user doesn't have the pokemon, add the pokemon to the User's pokemon array
-
-      // else, get another random pokemon
-
+      // get new pokemon's _id to save to the user's pokemons property
+      const pokemonObject = await Pokemons.findOne({pokemonId: randomPokemonId}).exec();
+      user.pokemons.push(pokemonObject._id);
+      user.save();
+      // console.log(pokemonObject)
+      // console.log(pokemonObject._id)
+      // console.log('SAVED')
+      res.json(pokemonObject)
 
     } catch (e) {
       console.log(e.message)
     }
-
   }
 );
+
+
+
 
 export default pomodoroController;
 
