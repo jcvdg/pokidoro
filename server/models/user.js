@@ -4,8 +4,6 @@ import Pokedex from './pokedex.js';
 
 const Schema = mongoose.Schema;
 
-// console.log(mongoose);
-
 const userSchema = new Schema({
   email: { 
     type: String, 

@@ -7,11 +7,9 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { applyPassportStrategy } from './store/passport.js';
-// import { userController } from './controller';
-// import userController from './controller/user.controller.js';
 import { userController, pomodoroController } from './controller/index.js';
 import { populatePokedex } from './store/populatePokedex.js'
-// import  from './controller/pomodoro.controller.js';
+
 dotenv.config();
 
 // Connect to the database
