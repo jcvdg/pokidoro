@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import sha256 from 'sha256';
-import Pokedex from './pokedex.js';
+import Pokemons from './pokemons.js'
 
 const Schema = mongoose.Schema;
 
@@ -14,7 +14,7 @@ const userSchema = new Schema({
   pokemons: [{
     // type: Number,
     type: Schema.Types.ObjectId,
-    ref: 'pokedex',
+    ref: 'Pokemon',
   }],
   berries: {
     type: Number,

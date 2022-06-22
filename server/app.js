@@ -8,7 +8,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { applyPassportStrategy } from './store/passport.js';
 import { userController, pomodoroController } from './controller/index.js';
-import { populatePokedex } from './store/populatePokedex.js'
+import { populatePokemons } from './store/populatePokemons.js';
 
 dotenv.config();
 
@@ -26,7 +26,7 @@ db.on('error', (err) => {
 
 // Fetches pokemon data from pokeapi
 // should only be executed once when the project is first run.
-populatePokedex();
+populatePokemons();
 
 // Init an Express App.
 const app = express();

@@ -1,10 +1,10 @@
 import User from './user.js';
 import MonthlySessions from './monthlySessions.js';
-import Pokedex from './pokedex.js';
+import Pokemons from './pokemons.js';
 import Tasks from './tasks.js';
 
 export {
-  MonthlySessions, Pokedex, Tasks, 
+  MonthlySessions, Tasks, Pokemons
 };
 
 export default User;

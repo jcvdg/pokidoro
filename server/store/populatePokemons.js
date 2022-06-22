@@ -1,11 +1,11 @@
-import Pokedex from '../models/pokedex.js';
+import Pokemons from '../models/pokemons.js';
 
-export const populatePokedex = async () => {
+export const populatePokemons = async () => {
   try {
-    let count = await Pokedex.count()
+    let count = await Pokemons.count()
 
     if(count != 0) {
-      console.log(`pokedex is already populated: ${count}`)
+      console.log(`pokemon table is already populated: ${count}`)
       return;
     }
 
@@ -18,6 +18,7 @@ export const populatePokedex = async () => {
 
       // put the necessary data into an object
       let pokemon = {
+        // _id: new ObjectId,
         name: data.name,
         pokemonId: data.id,
         image: {
@@ -26,13 +27,14 @@ export const populatePokedex = async () => {
         },
       }
 
-      // add pokemon to array
-      pokemons.all.push(pokemon)
+     
+
+      // save pokemon to the database
+      const newPokemonObject = new Pokemons(pokemon);
+      await newPokemonObject.save();
+
     }
 
-    // save pokemons to the database
-    const newPokemonObject = new Pokedex(pokemons);
-    await newPokemonObject.save();
     // add Pokemon's evolution data from another pokeapi endpoint
     addEvolutionData();
 
@@ -73,15 +75,18 @@ const getPokemonEvolution = async (pokemonId, evolvedPokemonData) => {
   try {
     const evolvedPokemonId = getPokemonId( evolvedPokemonData.species.url );
 
+    // check if the pokemon is not part of the original 151
+    if( pokemonId > 151) return;
+
     // if there's more pokemon to evolve in the evolution chain
     if( evolvedPokemonData.evolves_to.length > 0 && !evolvedPokemonData.is_baby) {
       getPokemonEvolution(evolvedPokemonId, evolvedPokemonData.evolves_to[0])
     }
   
     // add evolvedPokemonId to the 'evolvesTo' property in the db
-    const doc = await Pokedex.find({'all.pokemonId': 1})
-    doc[0].all[pokemonId-1].evolvesTo = evolvedPokemonId;
-    await doc[0].save();
+    const doc = await Pokemons.findOne({'pokemonId': pokemonId})
+    doc.evolvesTo = evolvedPokemonId;
+    await doc.save();
     
   } catch(e) {
     console.log(e.message);

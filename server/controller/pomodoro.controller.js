@@ -1,7 +1,6 @@
 import express from 'express';
 import passport from 'passport';
 import User from '../models/index.js';
-import Pokedex from '../models/index.js';
 
 
 const pomodoroController = express.Router();
@@ -108,7 +107,7 @@ pomodoroController.get(
         };
       // check if user has any pokemon with evolve: true
       let eventsIncludes;
-      let count = await Pokedex.count();
+      let count = await Pokemons.count();
       console.log('count', User.aggregate())
       let user = await User.findById(req.user._id).populate("pokemons");
 
@@ -143,6 +142,42 @@ pomodoroController.get(
       event: '',
       data: '', // pokemon image url
     });
+
+  }
+);
+
+//temporary api
+pomodoroController.put(
+  '/pokemon', 
+  passport.authenticate('jwt', {session: false}),
+  async (req,res) => {
+    try {
+      // get a random pokemon
+      // check if user has the pokemon
+
+
+
+    const userid = req.user._id
+    
+    const user = await User.findById(userid)
+      .populate('pokemons')
+      .exec ( (err, user) => {
+        if(err) console.log(err);
+        console.log('populated user: ', user);
+        res.json(user);
+      });
+
+
+      
+
+      // if the user doesn't have the pokemon, add the pokemon to the User's pokemon array
+
+      // else, get another random pokemon
+
+
+    } catch (e) {
+      console.log(e.message)
+    }
 
   }
 );

@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 const tasks = new Schema( {
   userId: Number,
-  parentTaskId: Number,
+  subTasks: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Tasks',
+  }],
   timeSpent: Number,
   complete: Boolean
 });
