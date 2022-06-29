@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import './PomodoroTimer.css'
+import { startFocusSession, endFocusSession, startBreakSession, endBreakSession } from '../actions/timerState';
 import TimeDisplay from './TimeDisplay';
+import DisplayPokemon from './DisplayPokemon';
+import './PomodoroTimer.css'
 
 const PomodoroTimer = (props) => {
   const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
@@ -11,14 +13,11 @@ const PomodoroTimer = (props) => {
   const dispatch = useDispatch();
 
   // states
-  const [timerState, setTimerState] = useState('DEFAULT');
-
   const [timer, setTimer] = useState();
   const [runTimer, setRunTimer] = useState(false);
   const [focus, setFocus] = useState(true);
   const [pause, setPause] = useState(false);
   const [runningTime, setRunningTime] = useState(selectedFocusTime);
-
 
   // on component load, start focus timer
   // 'DEFAULT', 'FOCUS_SESSION_START', 'FOCUS_SESSION_COMPLETE', 'BREAK_SESSION_START', 'BREAK_SESSION_COMPLETE'
@@ -30,11 +29,11 @@ const PomodoroTimer = (props) => {
   const startTimer = () => {
     if (focus) {
         setRunningTime(selectedFocusTime);
-        setTimerState('FOCUS_SESSION_START');
+        dispatch(startFocusSession());
         // setCount(count+1);
     } else {
         setRunningTime(selectedBreakTime);
-        setTimerState('BREAK_SESSION_START');
+        dispatch(startBreakSession());
     }
     setRunTimer(true);
     setPause(false);
@@ -46,12 +45,13 @@ const PomodoroTimer = (props) => {
 
     if (runTimer) {
         interval = setInterval(updateTime, 1000);
-        console.log('everryun');
+        // console.log('everryun');
         setTimer(interval);
     }
 
     return () => {
-        console.log('useeffect return - ran');
+        // console.log('useeffect return - ran');
+        // console.log('curernt session focus: ', focus)
         clearInterval(interval);
     };
   }, [runTimer, runningTime]);
@@ -59,15 +59,15 @@ const PomodoroTimer = (props) => {
   const updateTime = () => {
     if (runningTime > 0) {
       setRunningTime(runningTime => runningTime - 1);
-      console.log(`if greater, `, runningTime);
+      // console.log(`if greater, `, runningTime);
     }
-    console.log(`run focus session time - decrement`, runningTime);
+    // console.log(`run focus session time - decrement`, runningTime);
     if (runningTime === 0) {
       if (focus)  {
-          setTimerState('FOCUS_SESSION_COMPLETE');
-          console.log('..................................', '..................................')
+          dispatch(endFocusSession())
+          console.log('..................................')
       } else {
-          setTimerState('BREAK_SESSION_COMPLETE');
+          dispatch(endBreakSession());
       }
       setRunTimer(false);
       setFocus(!focus);
@@ -89,6 +89,7 @@ const PomodoroTimer = (props) => {
             Back
           </Link>
       </div>
+      <DisplayPokemon />
       <div>
         Pomodoro Timer:       
         <TimeDisplay timeInSeconds={selectedFocusTime*60}/>
@@ -110,18 +111,18 @@ const PomodoroTimer = (props) => {
       </div>
       <div
         className="button"
-        style={{ display: runningTime === 0 ? "flex" : "none" }}
-        // onClick={}
+        style={{ display: runningTime === 0 && !focus ? "flex" : "none" }}
+        onClick={ startTimer }
       >
         Start Break
       </div>
-      <div
+      {/* <div
         className="button"
         style={{ display: runningTime === 0 ? "flex" : "none" }}
         // onClick={}
       >
         Add 5 more minutes
-      </div>
+      </div> */}
     </div>
   );
 }
