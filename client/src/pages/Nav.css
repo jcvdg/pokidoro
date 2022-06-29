@@ -1,0 +1,8 @@
+.Nav {
+  position: fixed;
+  width: 10rem;
+  background: pink;
+  height: 100vh;
+  border-radius: 0 1rem 1rem 0;
+  box-shadow: var(--sectionShadow);
+}

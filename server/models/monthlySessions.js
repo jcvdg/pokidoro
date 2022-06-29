@@ -1,18 +1,23 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const monthlySessions = new Schema({
-  userId: [{
+const monthlySessions = new Schema({ // updated after break time completes
+  userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-  }],
-  startDate: Date,
-  dailySessions: {
-    date: Date,
-    session: {
-      dateTime: Date,
-      studyTime: Number,
+  },
+  date: {
+    type: Date,
+    default: () => new Date,
+  },
+  // dailySessions: {
+  //   type: [{
+  //     date: Date,
+  session: {
+    type: [{
+      sessionDateTime: Date,
       focusTime: Number,
+      breakTime: Number,
       // mood: String,
       task: [
         {
@@ -22,10 +27,20 @@ const monthlySessions = new Schema({
           }],
         },
       ],
-    },
-    totalSessionCount: Number,
-    totalCycleCount: Number,
+    }],
+    default: [],
   },
+  totalSessionCount: {
+    type: Number,
+    default: 0,
+  },
+  totalCycleCount: {
+    type: Number,
+    default: 0,
+  },
+  //   }],
+  //   default: [],
+  // },
 });
 
 const MonthlySessions = mongoose.model('MonthlySessions', monthlySessions);

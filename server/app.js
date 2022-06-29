@@ -7,10 +7,9 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { applyPassportStrategy } from './store/passport.js';
-// import { userController } from './controller';
-// import userController from './controller/user.controller.js';
-import { userController, pomodoroController } from './controller/index.js';
-// import  from './controller/pomodoro.controller.js';
+import { userController, pomodoroController, updateDataController } from './controller/index.js';
+import { populatePokemons } from './store/populatePokemons.js';
+
 dotenv.config();
 
 // Connect to the database
@@ -24,6 +23,10 @@ db.once('open', () => {
 db.on('error', (err) => {
   console.error('connection error:', err);
 });
+
+// Fetches pokemon data from pokeapi
+// should only be executed once when the project is first run.
+populatePokemons();
 
 // Init an Express App.
 const app = express();
@@ -39,6 +42,7 @@ applyPassportStrategy(passport);
 // use all controllers(APIs) here
 app.use('/', userController);
 app.use('/', pomodoroController);
+app.use('/', updateDataController);
 
 // Start Server here
 app.listen(8080, () => {

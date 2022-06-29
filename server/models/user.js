@@ -1,9 +1,19 @@
 import mongoose from 'mongoose';
 import sha256 from 'sha256';
+import Pokemons from './pokemons.js'
 
 const Schema = mongoose.Schema;
 
-// console.log(mongoose);
+// const weeklyStats = new Schema( {
+//   date: {
+//     Date: 
+//   },
+//   sessionCount: Number,
+//   cycleCount: Number,
+//   taskCompletionCount: Number,
+//   totalFocusTime: Number,
+//   totalBreakTime: Number,
+// })
 
 const userSchema = new Schema({
   email: { 
@@ -12,25 +22,32 @@ const userSchema = new Schema({
     lowercase: true,
    },
   hashedPassword: { type: String, required: true },
-  pokemons: [Number],
-  berries: {
+  pokemons: [{ // updated after focus time
+    // type: Number,
+    type: Schema.Types.ObjectId,
+    ref: 'Pokemon',
+  }],
+  berries: { // updated after focus time
     type: Number,
     default: 0
   },
   // currentMood: '', // string or array? image and text.  maybe ID. to reference other collection.
-  weeklyGraph: [{
-    pokemon: String,
+  weeklyGraph: [{ // updated after focus time
+    image: String,
     position: Number,
     date: Date,
   }],
-  weeklyStats: [{
-    sessionCount: Number,
-    cycleCount: Number,
-    taskCompletionCount: Number,
-    totalFocusTime: Number,
-    totalBreakTime: Number,
-    date: Date,
-  }],
+  weeklyStats: {
+    type: [{ // updated after break time completes
+      date: Date,
+      sessionCount: Number,
+      cycleCount: Number,
+      taskCompletionCount: Number,
+      totalFocusTime: Number,
+      totalBreakTime: Number,
+    }],
+    default: [],
+  },
   // todos: [{
   //     text: String,
   //     dueDate: Date,
