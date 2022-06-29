@@ -2,33 +2,25 @@ import express from 'express';
 import passport from 'passport';
 import User, { Pokemons } from '../models/index.js';
 
-
 const pomodoroController = express.Router();
 const BERRIES_TO_EVOLVE = 4;
+const NUMBER_OF_POKEMONS = 151;
 
 // get the amount of berries user has
 pomodoroController.get(
   '/berries',
   passport.authenticate('jwt', {session: false}),
   (req, res) => {
-    const userid = req.user._id
+    const userid = req.user._id;
     
     User.findById(userid, function(err, result) {
       if (err) {
         res.send(err);
       } else {
-        console.log(result.berries)
-        // res.json(result.berries); // User object with the userid from the jwt token
+        console.log(result.berries);
         res.json(result.berries); // User object with the userid from the jwt token
       }
     });
-
-    // User.find({}, (err, result) => {
-    //         res.status(200).json({
-    //           data: result,
-    //         });
-    //       });
-
   }
 );
 
@@ -44,10 +36,10 @@ pomodoroController.put(
       user.save();
 
       res.json(
-        {message: `berries updated by ${count}`}
-      )
+        { message: `berries updated by ${count}` }
+      );
     } catch (e) {
-       console.log( e.message );
+       console.error(e.message);
     }
   }
 );
@@ -57,13 +49,11 @@ pomodoroController.get(
   '/weeklyGraph',
   passport.authenticate('jwt', {session: false}),
   (req, res) => {
-    const userid = req.user._id
+    const userid = req.user._id;
     User.findById(userid, function(err, result) {
       if (err) {
         res.send(err);
       } else {
-        console.log('weeklygraph ', result.weeklyGraph)
-        // res.json(result.berries); // User object with the userid from the jwt token
         res.json(result.weeklyGraph); // User object with the userid from the jwt token
       }
     });
@@ -87,34 +77,33 @@ pomodoroController.put(
       
       let user = await User.findById(req.user._id).populate("pokemons");
       // check if user has enough berries to evolve a pokemon
-      if( user.berries < BERRIES_TO_EVOLVE ) eventLimit = events['GET_POKEMON'];
-      const randomEvent= Math.floor(Math.random()*eventLimit);
+      if (user.berries < BERRIES_TO_EVOLVE) eventLimit = events['GET_POKEMON'];
+      const randomEvent= Math.floor(Math.random() * eventLimit);
       
       let result = {};
       if (randomEvent< events['GET_BERRIES']) {
-        // user, time
-        result = await getBerries( user, Number(req.params.focustime));
-        console.log('get berries ', result);
-      } else if (randomEvent< events['GET_POKEMON']) {
-        // user
-        result = await getPokemon( user );
-        console.log('get pokemon ', result);
+        result = await getBerries(user, Number(req.params.focustime));
+        // console.log('get berries ', result);
+      } else if (randomEvent < events['GET_POKEMON']) {
+        result = await getPokemon(user);
+        // console.log('get pokemon ', result);
       } else {
         result = await evolvePokemon(user);
-        console.log('get evolve ', result);
+        // console.log('get evolve ', result);
       }
 
+      // TO DO: 
       // WHAT IF user has all the pokemons?
       // WHAT IF user has all the pokemons evolved?
       res.json(result);
     } catch (e) {
-      console.log(e.message);
+      console.error(e.message);
     }
   }
 );
 
 // user gets awarded berries
-const getBerries = async ( user, time) => {
+const getBerries = async (user, time) => {
   try {
     const berries = time >= 45 ? 2 : 1;
     user.berries = Number(user.berries) + berries;
@@ -130,71 +119,78 @@ const getBerries = async ( user, time) => {
 }
 
 // user gets awareded a pokemon
-const getPokemon = async ( user ) => {
+const getPokemon = async (user) => {
   try {
     let randomPokemonId;
     let userPokemonIds = [];
 
     // get an array of user's pokemons - just the pokemonId
-    userPokemonIds = user.pokemons.map( x => x.pokemonId)
+    userPokemonIds = user.pokemons.map(x => x.pokemonId);
 
     // get a pokemon that the user doesn't have yet
     do {
-      randomPokemonId = Math.floor(Math.random()*(151-1)+1);
-    } while( userPokemonIds.includes(randomPokemonId) )
+      randomPokemonId = Math.floor(Math.random() * NUMBER_OF_POKEMONS);
+    } while (userPokemonIds.includes(randomPokemonId))
 
     // get the new pokemon's _id to save to the user's pokemons array field
-    const pokemonObject = await Pokemons.findOne({pokemonId: randomPokemonId}).exec();
+    const pokemonObject = await Pokemons.findOne({ pokemonId: randomPokemonId }).exec();
     user.pokemons[randomPokemonId] = pokemonObject._id;
+    user.weeklyGraph.push({
+      image: pokemonObject.image.small,
+      date: new Date,
+    });
     await user.save();
 
     return {
       message: `You've caught ${pokemonObject.name}!`,
       image: pokemonObject.image.large,
-      // berries: user.berries,
+      berries: user.berries,
     };
   } catch (e) {
-    console.error(e.message)
+    console.error(e.message);
   }
 }
 
-
 // user gets a pokemon evolved
-const evolvePokemon = async ( user ) => {
+const evolvePokemon = async (userController) => {
   try {
-    // get a list of user's pokemons that can evolve (evolvesTo != null) && < 151
-    const userPokemonThatCanEvolve = user.pokemons.filter( x => x.evolvesTo <= 151); 
+    // get a list of user's pokemons that can evolve
+    const userPokemonThatCanEvolve = user.pokemons.filter(x => x.evolvesTo <= NUMBER_OF_POKEMONS); 
     let pokemonIndexToEvolveFrom;
     let pokemonIdToEvolveTo;
 
     // get a random pokemon to evolve to & check that the user doesn't already have the evolved pokemon (in user.pokemons)
     do {
       // randomly get a pokemon that can evolve
-      pokemonIndexToEvolveFrom = Math.floor( Math.random() * (userPokemonThatCanEvolve.length-1-1));
+      pokemonIndexToEvolveFrom = Math.floor(Math.random() * (userPokemonThatCanEvolve.length-1-1));
       // get the new evolved pokemon's id, and see if user.pokemson[that id] === null, else, get another random pokemon
-      pokemonIdToEvolveTo = userPokemonThatCanEvolve[pokemonIndexToEvolveFrom].evolvesTo
-    } while( user.pokemons[pokemonIdToEvolveTo] )
+      pokemonIdToEvolveTo = userPokemonThatCanEvolve[pokemonIndexToEvolveFrom].evolvesTo;
+    } while (user.pokemons[pokemonIdToEvolveTo])
 
     // get the new evolved pokemon's ObjectID 
-    const evolvedPokemonObject = await Pokemons.findOne({pokemonId: pokemonIdToEvolveTo}).exec()
+    // TODO: What if the PokemonObject is not found
+    const evolvedPokemonObject = await Pokemons.findOne({ pokemonId: pokemonIdToEvolveTo }).exec();
     
-    // add the pokemon's Object ID to the user's pokemon list
-    user.pokemons[pokemonIdToEvolveTo] = evolvedPokemonObject._id;
     // subtract berries needed to evolve the pokemon from user's berries count
     user.berries = user.berries - BERRIES_TO_EVOLVE;
+    // add the pokemon's Object ID to the user's pokemon list
+    user.pokemons[pokemonIdToEvolveTo] = evolvedPokemonObject._id;
+    user.weeklyGraph.push({
+      image: pokemonObject.image.small,
+      // position: ,
+      date: new Date,
+    });
     await user.save();
 
-    return{
+    return {
       message: `Your ${userPokemonThatCanEvolve[pokemonIndexToEvolveFrom].name} has evolved ${evolvedPokemonObject.name}!`,
       image: evolvedPokemonObject.image.large,
       berries: user.berries,
     };
-  } catch(e) {
-    console.error(e.message)
+  } catch (e) {
+    console.error(e.message);
   }
 }
-
-
 
 //temporary api
 // get new pokemon
@@ -211,28 +207,29 @@ pomodoroController.post(
         .exec();
         // console.log(user);
         // console.log('populated user: ', user);
-        userPokemonIds = user.pokemons.map( x => x.pokemonId)
+        userPokemonIds = user.pokemons.map( x => x.pokemonId);
         // console.log('pokemons: ', userPokemonIds)
 
         // get a pokemon that the user doesn't already have
         do {
-          randomPokemonId = Math.floor(Math.random()*(151-1)+1);
+          randomPokemonId = Math.floor(Math.random() * NUMBER_OF_POKEMONS);
           // console.log('randomPokemon: ', randomPokemonId)
-        } while( userPokemonIds.includes(randomPokemonId) )
+        } while (userPokemonIds.includes(randomPokemonId))
 
-        console.log('we\'re getting ', randomPokemonId)
+        console.log('we\'re getting ', randomPokemonId);
       
       // get new pokemon's _id to save to the user's pokemons field
+      // TO DO: what if pokemonObject is not existing?
       const pokemonObject = await Pokemons.findOne({pokemonId: randomPokemonId}).exec();
       user.pokemons[randomPokemonId] = pokemonObject._id;
       user.save();
       // console.log(pokemonObject)
       // console.log(pokemonObject._id)
       // console.log('SAVED')
-      res.json(pokemonObject)
+      res.json(pokemonObject);
 
     } catch (e) {
-      console.log(e.message)
+      console.error(e.message);
     }
   }
 );
@@ -250,10 +247,10 @@ pomodoroController.post(
 
       // MIGHT MOVE THIS OUT
       // check if user has enough berries
-      if( user.berries < BERRIES_TO_EVOLVE) return; // or return message like: 'you don't have enough berries to evolve, here's a berry for next time
+      if (user.berries < BERRIES_TO_EVOLVE) return; // or return message like: 'you don't have enough berries to evolve, here's a berry for next time
 
-      // get a list of user's pokemons that can evolve (evolvesTo != null) && < 151
-      const userPokemonThatCanEvolve = user.pokemons.filter( x => x.evolvesTo <= 151); 
+      // get a list of user's pokemons that can evolve
+      const userPokemonThatCanEvolve = user.pokemons.filter( x => x.evolvesTo <= NUMBER_OF_POKEMONS); 
       let pokemonIndexToEvolveFrom;
       let pokemonIdToEvolveTo;
 
@@ -262,10 +259,11 @@ pomodoroController.post(
         // randomly get a pokemon that can evolve
         pokemonIndexToEvolveFrom = Math.floor( Math.random() * (userPokemonThatCanEvolve.length-1-1));
         // get the new evolved pokemon's id, and see if user.pokemson[that id] === null, else, get another random pokemon
-        pokemonIdToEvolveTo = userPokemonThatCanEvolve[pokemonIndexToEvolveFrom].evolvesTo
-      } while( user.pokemons[pokemonIdToEvolveTo] )
+        pokemonIdToEvolveTo = userPokemonThatCanEvolve[pokemonIndexToEvolveFrom].evolvesTo;
+      } while (user.pokemons[pokemonIdToEvolveTo])
 
       // get the new evolved pokemon's ObjectID 
+      // TODO: What if the PokemonObject is not found
       const evolvedPokemonObject = await Pokemons.findOne({pokemonId: pokemonIdToEvolveTo}).exec()
       
       // add the pokemon's Object ID to the user's pokemon list
@@ -282,7 +280,7 @@ pomodoroController.post(
         }
       );
     } catch (e) {
-      console.log(e.message)
+      console.error(e.message);
     }
   }
 )

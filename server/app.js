@@ -7,7 +7,7 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { applyPassportStrategy } from './store/passport.js';
-import { userController, pomodoroController } from './controller/index.js';
+import { userController, pomodoroController, updateDataController } from './controller/index.js';
 import { populatePokemons } from './store/populatePokemons.js';
 
 dotenv.config();
@@ -42,6 +42,7 @@ applyPassportStrategy(passport);
 // use all controllers(APIs) here
 app.use('/', userController);
 app.use('/', pomodoroController);
+app.use('/', updateDataController);
 
 // Start Server here
 app.listen(8080, () => {
