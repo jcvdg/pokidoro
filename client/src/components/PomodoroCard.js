@@ -4,7 +4,8 @@ import TimerOptions from './TimerOptions';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { pomodoroFocusTime, pomodoroBreakTime } from '../actions';
-
+import './PomodoroCard.css';
+import musicIcon from '../img/music.svg'
 
 const focusOptions = [15,25,35,45];
 const breakOptions = [5,10,15,20];
@@ -27,38 +28,48 @@ const PomodoroCard = (props) => {
   }
   
   return (
-    <div>
-      <div className="timerButtons">
-        <div className="sessionType">
-            <p>Focus Time</p>
-            <div className="timeSelector">
-                <TimerOptions
-                  type = "FOCUS"
-                  options={focusOptions}
-                  selected={defaultFocusOption}
-                  // onSelectedChange={setFocusSessionTime} 
-                  onSelect={(onSelectFocus)}
-                />
-            </div>
+    <div className="PomodoroCard">
+      <div className="topSection">
+        <div className="timerButtons">
+          <TimerOptions
+            label='Focus Time'
+            options={focusOptions}
+            selected={defaultFocusOption}
+            onSelect={(onSelectFocus)}
+          />
+          <TimerOptions
+            label='Break Time'
+            options={breakOptions}
+            selected={defaultBreakOption}
+            onSelect={(onSelectBreak)}
+          />
         </div>
-        <div className="sessionType">
-            <p>Break Time</p>
-            <div className="timeSelector">
-                <TimerOptions
-                  type = "BREAK"
-                  options={breakOptions}
-                  selected={defaultBreakOption}
-                  // onSelectedChange={setBreakSessionTime} 
-                  onSelect={(onSelectBreak)}
-                />
-            </div>
+        <div className="soundscape">
+          <div className="btn">
+            <img 
+              src={ musicIcon } 
+              class="musicIcon icon-btn"
+              alt="music icon"
+            />
+          </div>
         </div>
       </div>
-      <TimeDisplay timeInSeconds={selectedFocusTime*60}/>
-      <div className="button">
-          <Link to={`/pomodoro`}>
+      <div className="centerSection">
+        <div className="timer">
+          <TimeDisplay
+            timeInSeconds={selectedFocusTime*60}
+          />
+        </div>
+        <div className="button">
+          <Link to={ `/pomodoro` }>
             Start
           </Link>
+        </div>
+      </div>
+      <div className="bottomSection">
+        <div className="taskSection">
+          task item here
+        </div>
       </div>
     </div>
   );

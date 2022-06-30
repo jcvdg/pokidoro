@@ -6,6 +6,8 @@ import { startFocusSession, endFocusSession, startBreakSession, endBreakSession 
 import TimeDisplay from './TimeDisplay';
 import DisplayPokemon from './DisplayPokemon';
 import './PomodoroTimer.css'
+import backIcon from '../img/Back-Vector.svg';
+import musicIcon from '../img/music.svg'
 
 const PomodoroTimer = (props) => {
   const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
@@ -19,11 +21,9 @@ const PomodoroTimer = (props) => {
   const [pause, setPause] = useState(false);
   const [runningTime, setRunningTime] = useState(selectedFocusTime);
 
-  // on component load, start focus timer
-  // 'DEFAULT', 'FOCUS_SESSION_START', 'FOCUS_SESSION_COMPLETE', 'BREAK_SESSION_START', 'BREAK_SESSION_COMPLETE'
+  // on component load, start timer countdown
   useEffect( () => {
     startTimer();
-
   },[])
 
   const startTimer = () => {
@@ -84,22 +84,36 @@ const PomodoroTimer = (props) => {
 
   return (
     <div className='PomodoroTimer'>
-      <div className="button">
+      <div className="topSection">
+        <div className="navgation-btn btn">
           <Link to={`/`}>
-            Back
+            <img 
+              src={ backIcon } 
+              class="backIcon .icon-btn"
+              alt="back-arrow icon"
+            />
           </Link>
+        </div>
+        <div className="soundscape">
+          <div className="btn">
+            <img 
+              src={ musicIcon } 
+              class="musicIcon icon-btn"
+              alt="music icon"
+            />
+          </div>
+        </div>
       </div>
       <DisplayPokemon />
-      <div>
+      {/* <div>
         Pomodoro Timer:       
         <TimeDisplay timeInSeconds={selectedFocusTime*60}/>
       </div>
       <div>
         Break time:
         <TimeDisplay timeInSeconds={selectedBreakTime*60}/>
-      </div>
+      </div> */}
       <div>
-        What the user will see:
         <TimeDisplay timeInSeconds={ (runTimer || pause) ? runningTime : focus ? selectedFocusTime*60 : selectedBreakTime*60}/>
       </div>
       <div 
@@ -123,6 +137,12 @@ const PomodoroTimer = (props) => {
       >
         Add 5 more minutes
       </div> */}
+      <div className="taskItem">
+        <input type="checkbox"/>
+        <div className="taskName">
+          task item here
+        </div>
+      </div>
     </div>
   );
 }

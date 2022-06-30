@@ -1,8 +1,18 @@
 .Nav {
   position: fixed;
   width: 10rem;
-  background: pink;
+  background: rgba(255, 255, 255, 0.48);
   height: 100vh;
   border-radius: 0 1rem 1rem 0;
   box-shadow: var(--sectionShadow);
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  margin: 3rem 0 0 2rem;
+}
+
+nav * {
+  padding-bottom: 1rem;
 }

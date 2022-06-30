@@ -1,0 +1,23 @@
+.WeeklyProgressCard {
+  background: rgba(170, 170, 170, 0.307);
+  background: url(../img/forest.jpeg), rgba(255, 255, 255, 0.25);
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: center center;
+  margin-top: 2rem;
+  width: 35rem;
+  height: 10rem;
+  box-shadow: var(--sectionShadow);
+  position: relative;
+  z-index: 0;
+  border-radius: 1rem;
+}
+
+.WeeklyProgressCard:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  backdrop-filter: blur(2px);
+}

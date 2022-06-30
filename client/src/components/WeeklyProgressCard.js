@@ -1,9 +1,12 @@
 import React from 'react';
+import './WeeklyProgressCard.css'
 
 const WeeklyProgressCard = () => {
   return (
-    <div>
-      weekly progress card
+    <div className="WeeklyProgressCard">
+      <div>
+        weekly progress
+      </div>
     </div>
   );
 }

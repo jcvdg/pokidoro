@@ -1,15 +1,37 @@
 * {
   box-sizing: border-box;
   margin: 0;
+  font-family: 'Inter', sans-serif;
 }
 
 :root {
  --sectionShadow: 0px 4px 17px 2px rgba(0, 0, 0, 0.25);
+ --buttonShadow: 0px 0px 20px rgba(79, 79, 79, 0.25);
+ --mainAppBackground: 
+  radial-gradient(at 73% 92%, hsla(329,76%,69%,1) 0px, transparent 50%),
+  radial-gradient(at 56% 99%, hsla(283,77%,63%,1) 0px, transparent 50%),
+  radial-gradient(at 50% 98%, hsla(289,67%,72%,1) 0px, transparent 50%),
+  radial-gradient(at 43% 40%, hsla(263,97%,71%,1) 0px, transparent 50%),
+  radial-gradient(at 4% 36%, hsla(301,73%,69%,1) 0px, transparent 50%),
+  radial-gradient(at 71% 43%, hsla(282,62%,67%,1) 0px, transparent 50%),
+  radial-gradient(at 25% 10%, hsla(210,78%,79%,1) 0px, transparent 50%),
+  radial-gradient(at 81% 75%, hsla(99,97%,64%,1) 0px, transparent 50%);
+  /* --buttonBg: rgb(255, 194, 104, 1); */
+  --buttonBg: rgba(139, 210, 239, 0.68);
+  --buttonHover: rgb(146, 187, 249);
+  /* --buttonBorder: rgb(255, 194, 104); */
+  --buttonText: #fff;
+  --buttonBgSecondary: rgba(168, 230, 255, 0.502);
+  --colorSecondary: rgb(28, 36, 74);
+  /* --buttonHoverText: rgb(255, 194, 104); */
 }
 
 .App {
-  background: #f3f3f3;
+  /* background: #f3f3f3; */
+  background: rgba(179, 190, 255, 1);
+  background-image: var(--mainAppBackground);
   height: 100vh;
+  z-index: -1;
 }
 
 .button{
@@ -17,15 +39,48 @@
   align-items: center;
   justify-content: center;
   color: white;
+  font-weight: bold;
   border:none;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   background: var(--buttonBg);
-  transition:all 100ms ease-out;
+  transition:all 150ms ease-out;
+  padding: 0.5rem 2rem;
+  /* border: 2px solid var(--buttonBorder); */
+  text-shadow: 0px 0px 2px #3b3b3b;
+  box-shadow: var(--buttonShadow);
+
 }
 
 .button:hover{
   cursor: pointer;
-  color: var(--orange);
-  background: transparent;
-  border: 2px solid var(--orange);
+  /* background: var(--buttonBorder); */
+  background: var(--buttonHover);
+  /* border: 2px solid var(--buttonBorder); */
+  letter-spacing: 2px;
+  text-shadow: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.btn {
+  cursor: pointer;
+  border-radius: 50%;
+  /* background: rgba(255,255,255,0.4); */
+	box-sizing: content-box;
+  position: relative;
+	height: 1.3rem;
+	padding: 10px;
+	width: 1.3rem;
+	-moz-transition: color 0.2s linear;
+	-o-transition: color 0.2s linear;
+	-webkit-transition: color 0.2s linear;
+	transition: color 0.2s linear;
+}
+
+.btn:hover {
+  color:rgb(66, 165, 246);
+  background: rgba(255,255,255,0.4);
 }

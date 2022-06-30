@@ -1,4 +1,5 @@
 import React from 'react';
+import './TimeDisplay.css';
 
 const TimeDisplay = ({timeInSeconds}) => {
 	const formatTime = (seconds) => {

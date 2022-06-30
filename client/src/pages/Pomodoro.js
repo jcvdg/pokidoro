@@ -5,7 +5,6 @@ import './Pomodoro.css';
 const Pomodoro = () => {
   return (
     <div className="Pomodoro">
-      Pomoodor
       <PomodoroTimer />
     </div>
   );
