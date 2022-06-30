@@ -31,6 +31,8 @@ const updatePomodoroState = (state = 'DEFAULT', action) => {
       return 'BREAK_SESSION_START';
     case 'BREAK_SESSION_COMPLETE':
       return 'BREAK_SESSION_COMPLETE';
+    case 'DEFAULT':
+      return 'DEFAULT';
     default:
       return state;
   }

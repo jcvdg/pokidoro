@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Home from './pages/Home';
-import Nav from './pages/Nav';
+import Nav from './components/Nav';
 import Auth from './pages/Auth';
 import Pomodoro from './pages/Pomodoro';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';

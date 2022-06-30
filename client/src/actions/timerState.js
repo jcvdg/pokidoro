@@ -30,3 +30,9 @@ export const endBreakSession = () => {
     type: 'BREAK_SESSION_COMPLETE'
   };
 }
+
+export const defaultState = () => {
+  return {
+    type: 'DEFAULT'
+  }
+}

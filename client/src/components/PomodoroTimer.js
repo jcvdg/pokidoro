@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { startFocusSession, endFocusSession, startBreakSession, endBreakSession } from '../actions/timerState';
+import { startFocusSession, endFocusSession, startBreakSession, endBreakSession, defaultState } from '../actions/timerState';
 import TimeDisplay from './TimeDisplay';
 import DisplayPokemon from './DisplayPokemon';
 import './PomodoroTimer.css'
@@ -12,6 +12,8 @@ import musicIcon from '../img/music.svg'
 const PomodoroTimer = (props) => {
   const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
   const selectedBreakTime = useSelector((state) => state.selectedBreakTime);
+  const pomodoroState = useSelector((state) => state.pomodoroState);
+
   const dispatch = useDispatch();
 
   // states
@@ -27,6 +29,7 @@ const PomodoroTimer = (props) => {
   },[])
 
   const startTimer = () => {
+    console.log('start', pomodoroState)
     if (focus) {
         setRunningTime(selectedFocusTime);
         dispatch(startFocusSession());
@@ -82,15 +85,22 @@ const PomodoroTimer = (props) => {
     console.log('pause completeTimer: ', runTimer);
   };
 
+  const handlePageChange = () => {
+    dispatch(defaultState());
+  }
+
   return (
     <div className='PomodoroTimer'>
       <div className="topSection">
-        <div className="navgation-btn btn">
+        <div 
+          className="navgation-btn btn"
+          >
           <Link to={`/`}>
             <img 
               src={ backIcon } 
               class="backIcon .icon-btn"
               alt="back-arrow icon"
+              onClick={handlePageChange}
             />
           </Link>
         </div>
@@ -137,7 +147,7 @@ const PomodoroTimer = (props) => {
       >
         Add 5 more minutes
       </div> */}
-      <div className="taskItem">
+      <div className="taskItem" style={{display: pomodoroState === 'FOCUS_SESSION_START'? "" : "none"}}>
         <input type="checkbox"/>
         <div className="taskName">
           task item here

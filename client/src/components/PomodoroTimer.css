@@ -1,6 +1,6 @@
 .PomodoroTimer {
   width: 35rem;
-  height: 35rem;
+  height: 38rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,18 +35,10 @@
     top: 19%;
   }
 
-.DisplayPokemon {
-  border: 1px solid pink;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  width: 25rem;
-  height: 18rem;
-  padding-bottom: 2rem;
-}
+
 
 .PomodoroTimer .taskItem {
-  margin-top: 2rem;
+  margin-top: 3rem;
   width: 60%;
   display: flex;
 }
