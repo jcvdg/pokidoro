@@ -5,6 +5,8 @@ import User, { Pokemons } from '../models/index.js';
 const pomodoroController = express.Router();
 const BERRIES_TO_EVOLVE = 4;
 const NUMBER_OF_POKEMONS = 151;
+// const BERRY_URL = 'https://cdn2.bulbagarden.net/upload/thumb/1/18/Razz_Berry_Winter_Fest_Artwork_Winter_Fest_Artwork.png/105px-Razz_Berry_Winter_Fest_Artwork_Winter_Fest_Artwork.png';
+const BERRY_URL = 'https://cdn2.bulbagarden.net/upload/3/32/Dream_Razz_Berry_Sprite.png';
 
 // get the amount of berries user has
 pomodoroController.get(
@@ -18,7 +20,7 @@ pomodoroController.get(
         res.send(err);
       } else {
         console.log(result.berries);
-        res.json(result.berries); // User object with the userid from the jwt token
+        res.json({ count: result.berries }); // User object with the userid from the jwt token
       }
     });
   }
@@ -95,6 +97,7 @@ pomodoroController.put(
       // TO DO: 
       // WHAT IF user has all the pokemons?
       // WHAT IF user has all the pokemons evolved?
+      // randomly pick a pokemon
       res.json(result);
     } catch (e) {
       console.error(e.message);
@@ -108,11 +111,22 @@ const getBerries = async (user, time) => {
     const berries = time >= 45 ? 2 : 1;
     user.berries = Number(user.berries) + berries;
     await user.save();
-    return {
-      message: `You got ${berries} berries!`,
-      image: '',
-      berries: user.berries,
-    };
+
+    if (time >= 45) {
+      return {
+        message: `You got ${berries} berries!`,
+        image: BERRY_URL,
+        berries: user.berries,
+        event: 'BERRY',
+      };
+    } else {
+      return {
+        message: `You got ${berries} berry!`,
+        image: BERRY_URL,
+        berries: user.berries,
+        event: 'BERRY',
+      };
+    }
   } catch (e) {
     console.error(e.message);
   }
@@ -145,6 +159,8 @@ const getPokemon = async (user) => {
       message: `You've caught ${pokemonObject.name}!`,
       image: pokemonObject.image.large,
       berries: user.berries,
+      event: 'POKEMON',
+      pokemonName: pokemonObject.name,
     };
   } catch (e) {
     console.error(e.message);
@@ -186,6 +202,8 @@ const evolvePokemon = async (userController) => {
       message: `Your ${userPokemonThatCanEvolve[pokemonIndexToEvolveFrom].name} has evolved ${evolvedPokemonObject.name}!`,
       image: evolvedPokemonObject.image.large,
       berries: user.berries,
+      event: 'EVOLVE',
+      pokemonName: evolvedPokemonObject.name,
     };
   } catch (e) {
     console.error(e.message);
