@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './WeeklyProgressCard.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { getBerriesCount, getWeeklyStats } from '../store/actions/index';
+import { getBerriesCount, getWeeklyStats } from '../../store/actions/index';
 
 const WeeklyProgressCard = () => {
   const weeklyPokemons = useSelector((state) => state.getWeeklyStats.data);

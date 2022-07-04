@@ -1,6 +1,6 @@
 .WeeklyProgressCard {
   background: rgba(170, 170, 170, 0.307);
-  background: url(../img/forest.jpeg), rgba(255, 255, 255, 0.5);
+  background: url(../../assets/img/forest.jpeg), rgba(255, 255, 255, 0.5);
   background-blend-mode: overlay;
   background-size: cover;
   background-position: center center;

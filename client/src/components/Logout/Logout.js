@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { logout } from '../store/actions/auth.action';
+import { logout } from '../../store/actions/auth.action';
 import { useNavigate, Navigate } from 'react-router-dom';
 
 const Logout = () => {

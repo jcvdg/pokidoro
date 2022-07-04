@@ -1,11 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import './DisplayPokemon.css'
-import pokeball from '../img/pokeball.png'
+import pokeball from '../../assets/img/pokeball.png';
 const DisplayPokemon = () => {
 const pomodoroState = useSelector((state) => state.pomodoroState);
 const surpriseEvent = useSelector((state) => state.getEvent.data);
-const pokemonPlaceholder = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png';
   
   return (
     <div className="DisplayPokemon">

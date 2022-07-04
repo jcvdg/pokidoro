@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import useSound from 'use-sound';
-import {HowlOptions} from "howler";
-import soundRainStorm from '../assets/sounds/heavy-rain-storm-sounds.mp3';
+// import {HowlOptions} from "howler";
 
-import { startFocusSession, endFocusSession, startBreakSession, endBreakSession, defaultState } from '../store/actions/timerState';
-import { event, addSessionStats, updateWeeklyStats } from '../store/actions/index';
+import { startFocusSession, endFocusSession, startBreakSession, endBreakSession, defaultState } from '../../store/actions/timerState';
+import { event, addSessionStats, updateWeeklyStats } from '../../store/actions/index';
 
-import TimeDisplay from './TimeDisplay';
-import DisplayPokemon from './DisplayPokemon';
 import './PomodoroTimer.css'
-import backIcon from '../img/Back-Vector.svg';
-import musicIcon from '../img/music.svg';
-import musicOffIcon from '../img/musicoff.svg';
+import TimeDisplay from '../TimeDisplay/TimeDisplay';
+import DisplayPokemon from '../DisplayPokemon/DisplayPokemon';
+import backIcon from '../../assets/img/Back-Vector.svg';
+import musicIcon from '../../assets/img/music.svg';
+import musicOffIcon from '../../assets/img/musicoff.svg';
+import soundRainStorm from '../../assets/sounds/heavy-rain-storm-sounds.mp3';
 
 const PomodoroTimer = (props) => {
   const selectedFocusTime = useSelector((state) => state.selectedFocusTime);

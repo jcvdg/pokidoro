@@ -3,8 +3,8 @@ import './App.css';
 import Home from './pages/Home';
 import Auth from './pages/Auth';
 import Pomodoro from './pages/Pomodoro';
-import Nav from './components/Nav';
-import Logout from './components/Logout';
+import Nav from './components/Nav/Nav';
+import Logout from './components/Logout/Logout';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 

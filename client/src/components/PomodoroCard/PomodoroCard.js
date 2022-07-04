@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import TimeDisplay from './TimeDisplay';
-import TimerOptions from './TimerOptions';
+import TimeDisplay from '../TimeDisplay/TimeDisplay';
+import TimerOptions from '../TimerOptions/TimerOptions';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { pomodoroFocusTime, pomodoroBreakTime } from '../store/actions';
+import { pomodoroFocusTime, pomodoroBreakTime } from '../../store/actions';
 import './PomodoroCard.css';
-import musicIcon from '../img/music.svg'
+// import musicIcon from '../img/music.svg'
 
 const focusOptions = [15,25,35,45];
 const breakOptions = [5,10,15,20];
