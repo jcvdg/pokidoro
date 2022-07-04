@@ -30,7 +30,8 @@
   /* background: #f3f3f3; */
   background: rgba(179, 190, 255, 1);
   background-image: var(--mainAppBackground);
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   z-index: -1;
 }
 
@@ -83,4 +84,9 @@ a {
 .btn:hover {
   color:rgb(66, 165, 246);
   background: rgba(255,255,255,0.4);
+}
+
+.button:disabled {
+  /* background: lightblue; */
+  pointer-events: none;
 }

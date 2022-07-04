@@ -50,15 +50,13 @@ pomodoroController.put(
 pomodoroController.get(
   '/weeklyGraph',
   passport.authenticate('jwt', {session: false}),
-  (req, res) => {
-    const userid = req.user._id;
-    User.findById(userid, function(err, result) {
-      if (err) {
-        res.send(err);
-      } else {
-        res.json(result.weeklyGraph); // User object with the userid from the jwt token
-      }
-    });
+  async (req, res) => {
+    try {
+      let user = await User.findById(req.user._id);
+      res.json( user.weeklyGraph );
+    } catch (e) {
+      console.error(e.message);
+    }
   }
 );
 
@@ -168,13 +166,12 @@ const getPokemon = async (user) => {
 }
 
 // user gets a pokemon evolved
-const evolvePokemon = async (userController) => {
+const evolvePokemon = async (user) => {
   try {
     // get a list of user's pokemons that can evolve
     const userPokemonThatCanEvolve = user.pokemons.filter(x => x.evolvesTo <= NUMBER_OF_POKEMONS); 
     let pokemonIndexToEvolveFrom;
     let pokemonIdToEvolveTo;
-
     // get a random pokemon to evolve to & check that the user doesn't already have the evolved pokemon (in user.pokemons)
     do {
       // randomly get a pokemon that can evolve
@@ -186,13 +183,12 @@ const evolvePokemon = async (userController) => {
     // get the new evolved pokemon's ObjectID 
     // TODO: What if the PokemonObject is not found
     const evolvedPokemonObject = await Pokemons.findOne({ pokemonId: pokemonIdToEvolveTo }).exec();
-    
     // subtract berries needed to evolve the pokemon from user's berries count
     user.berries = user.berries - BERRIES_TO_EVOLVE;
     // add the pokemon's Object ID to the user's pokemon list
     user.pokemons[pokemonIdToEvolveTo] = evolvedPokemonObject._id;
     user.weeklyGraph.push({
-      image: pokemonObject.image.small,
+      image: evolvedPokemonObject.image.small,
       // position: ,
       date: new Date,
     });

@@ -1,0 +1,36 @@
+.sessionType {
+  margin-bottom: 3px;
+  font-size: 0.8rem;
+}
+
+.timeSelector {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+button {
+  border-style: none;
+  padding: 0.3rem 1rem;
+  background-color: var(--buttonBgSecondary);
+  /* color: #2a2d39; */
+  border-right: none;
+}
+
+  button:hover {
+    background-color: var(--buttonHover);
+    cursor: pointer;
+  }
+
+  button:first-child {
+    border-radius: 1rem 0 0 1rem;
+    padding-left: 1.2rem;
+  }
+
+  button:last-child {
+    border-radius: 0 1rem 1rem 0;
+    padding-right: 1.2rem;
+  }
+
+  .active {
+    background-color: var(--buttonHover);
+  }

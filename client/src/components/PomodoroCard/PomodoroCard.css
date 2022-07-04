@@ -1,0 +1,86 @@
+.PomodoroCard {
+  width: 42rem;
+  height: 28rem;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: var(--sectionShadow);
+  padding: 2rem;
+  margin-top: 2rem;
+  padding: 2rem 3.5rem 2rem 3.5rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.topSection {
+  position: relative;
+}
+
+  /* .PomodoroCard .soundscape {
+    position: absolute;
+    right: -5.4rem;
+    top: 0;
+  } */
+
+  .PomodoroCard .leftContainer {
+    position: absolute;
+    right: -5.4rem;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+  }
+
+    .PomodoroCard .berries {
+      border-radius: 3rem;
+      /* border-radius: 50%; */
+      padding: 14px 10px;
+      background: rgba(255,255,255,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .berries img {
+      width: 22px;
+    }
+
+
+.centerSection {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+  .timerButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    margin-top: 1.5rem;
+  }
+
+  .timer {
+    margin-top: 3rem;
+  }
+
+.bottomSection {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+}
+
+  .taskSection {
+    background: var(--buttonBgSecondary);
+    height: 3.5rem;
+    width: 16rem;
+    margin-bottom: 3rem;
+    border-radius: 1rem;
+    text-align: center;
+  }

@@ -1,0 +1,17 @@
+.TimeDisplay {
+  font-size: 5rem;
+  font-weight: 700;
+  /* color: #39435c; */
+  /* color: #2a2d39; */
+  color: #1c244a;
+  /* margin-top: 1rem; */
+}
+
+.pokeball {
+  /* padding-top: 1rem; */
+}
+
+.TimeDisplay {
+  margin-top: 1rem;
+  margin-bottom: 0.6rem;
+}

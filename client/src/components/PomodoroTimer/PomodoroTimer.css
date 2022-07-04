@@ -1,0 +1,79 @@
+.PomodoroTimer {
+  width: 42rem;
+  height: 38rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: var(--sectionShadow);
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 1rem;
+}
+
+.PomodoroTimer .topSection {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navigation-btn * {
+  font-size: 2rem;
+}
+
+.icon-btn {
+  position: absolute;
+}
+
+  .backIcon {
+    left: 22%;
+    top: 25%;
+  }
+
+  .musicIcon {
+    left: 18%;
+    top: 19%;
+  }
+
+.PomodoroTimer .taskItem {
+  margin-top: 3rem;
+  width: 60%;
+  display: flex;
+}
+
+  input[type=checkbox] {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 23px;
+    visibility: hidden;
+  }
+  
+  input[type=checkbox]:after,
+  input[type=checkbox]::after {
+    content: " ";
+    background-color: rgba(255, 255, 255, 0.25);
+    display: inline-block;
+    margin-left: 10px;
+    padding: 1px 3px 3px 4px;
+    color: #fff;
+    width: 22px;
+    height: 25px;
+    visibility: visible;
+    border: 3px solid rgba(19, 37, 69, 0.693);
+    border-radius: 5px;
+  }
+  
+  input[type=checkbox]:checked:after,
+  input[type=checkbox]:checked::after {
+    content: "\2714";
+    font-weight: bold;
+    background-color: var(--buttonBg);
+  }
+
+  .taskName {
+    border-bottom: 3px solid rgba(19, 37, 69, 0.693);
+    width: 100%;
+    margin: 0 1.5rem;
+    font-size: 1.2rem;
+  }
