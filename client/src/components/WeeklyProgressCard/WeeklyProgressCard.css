@@ -30,7 +30,7 @@
 .WeeklyProgressCard .weeklyCollections {
   display: flex;
   overflow: hidden;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
 }
 
 .WeeklyProgressCard img {
