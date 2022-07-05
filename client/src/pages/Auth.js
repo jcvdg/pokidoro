@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Auth.css";
 // import Logo from "../../img/logo.png";
+import CenterContainer from "../components/Modals/CenterContainer";
 import { logIn, signUp } from "../store/actions/auth.action";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -44,22 +45,16 @@ const Auth = () => {
 
   return (
     <div className="Auth">
-      {/* left side */}
-
-      <div className="a-left">
-        {/* <img src={Logo} alt="" /> */}
-
-        <div className="Webname">
+      <CenterContainer>
+      <div className="top">
+        <div className="title">
           <h1>Pokidoro</h1>
           <h6>One session at a time</h6>
         </div>
       </div>
-
-      {/* right form side */}
-
-      <div className="a-right">
+      <div className="bottom">
         <form className="infoForm authForm" onSubmit={handleSubmit}>
-          <h3>{isSignUp ? "Register" : "Login"}</h3>
+          <h3>{ isSignUp ? "Register" : "Login" }</h3>
           <div>
             <input
               required
@@ -80,6 +75,7 @@ const Auth = () => {
               name="password"
               value={data.password}
               onChange={handleChange}
+              style={{ border: confirmPass ? "" : "1px solid red"}}
             />
             {isSignUp && (
               <input
@@ -89,22 +85,23 @@ const Auth = () => {
                 name="confirmpass"
                 placeholder="Confirm Password"
                 onChange={handleChange}
+                style={{ border: confirmPass ? "" : "1px solid red"}}
               />
             )}
           </div>
 
           <span
             style={{
-              color: "red",
+              color: "rgba(212,0,0,1)",
               fontSize: "12px",
-              alignSelf: "flex-end",
+              fontWeight: "700",
               marginRight: "5px",
               display: confirmPass ? "none" : "block",
             }}
           >
-            *Confirm password is not same
+            *Password and confirm password do not match
           </span>
-          <div>
+          <div className="signupToggle">
             <span
               style={{
                 fontSize: "12px",
@@ -117,11 +114,11 @@ const Auth = () => {
               }}
             >
               {isSignUp
-                ? "Already have an account Login"
-                : "Don't have an account Sign up"}
+                ? "Already have an account? Login"
+                : "Don't have an account? Sign up"}
             </span>
             <button
-              className="button infoButton"
+              className="button"
               type="Submit"
               disabled={loading}
             >
@@ -130,6 +127,7 @@ const Auth = () => {
           </div>
         </form>
       </div>
+        </CenterContainer>
     </div>
   );
 };
