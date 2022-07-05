@@ -25,7 +25,8 @@
 
 .title > h1 {
   font-size: 3rem;
-  color: rgb(235, 212, 63);
+  /* color: rgb(235, 212, 63); */
+  color: rgba(168, 230 , 255, 0.94);
   text-shadow: 0 2px 8px rgba(54, 54, 54, 0.613);
 }
 
