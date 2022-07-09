@@ -2,7 +2,9 @@ import { combineReducers } from 'redux';
 import authReducer from './authReducer';
 import { selectBreakTimeReducer, selectFocusTimeReducer, updatePomodoroState } from './pomodoroReducer.js';
 
-const berriesCountReducer = (state = { berryCount: 0, loading: false, error: false, state: 'DEFAULT'}, action) => {
+const berriesCountReducer = (
+  state = { berryCount: 0, loading: false, error: false, state: 'DEFAULT'}, 
+  action) => {
   switch (action.type) {
     case 'GETTING_BERRIES_COUNT':
       return { ...state, loading: true, error: false, state: 'GETTING_BERRIES_COUNT' };
@@ -16,7 +18,7 @@ const berriesCountReducer = (state = { berryCount: 0, loading: false, error: fal
 }
 
 const getEventReducer = (
-  state = { data: null, loading: true, error: false }, 
+  state = { data: {}, loading: true, error: false, state: 'DEFAULT' }, 
   action) => {
     switch (action.type) {
       case 'GETTING_EVENT':
@@ -30,35 +32,39 @@ const getEventReducer = (
     }
 }
 
-// export not needed
-const addSessionReducer = (state = null, action) => {
+const addSessionReducer = (
+  state = { loading: true, error: false, state: null },
+  // state = null, 
+  action) => {
   switch (action.type) {
     case 'SESSION_UPDATING':
-      return 'SESSION_UPDATING';
+      return { loading: true, error: false, state: 'SESSION_UPDATING'};
     case 'SESSION_UPDATED':
-      return 'SESSION_UPDATED'
+      return { loading: false, error: false, state: 'SESSION_UPDATED'};
     case 'SESSION_UPDATE_FAIL':
-      return 'SESSION_UPDATE_FAIL';
+      return { loading: false, error: true, state: 'SESSION_UPDATE_FAIL'};
     default:
       return state;
   }
 }
 
-const updateWeeklyStatsReducer = (state = null, action) => {
+const updateWeeklyStatsReducer = (
+  state = { loading: true, error: false, state: null },
+  action) => {
   switch (action.type) {
     case 'WEEKLY_UPDATING':
-      return 'WEEKLY_UPDATING';
+      return  { loading: true, error: false, state: 'WEEKLY_UPDATING'};
     case 'WEEKLY_UPDATED':
-      return 'WEEKLY_UPDATED';
+      return { loading: false, error: false, state: 'WEEKLY_UPDATED'};
     case 'WEEKLY_FAIL':
-      return 'WEEKLY_FAIL';
+      return { loading: false, error: true, state: 'WEEKLY_FAIL'};
     default:
       return state;
   }
 }
 
 const getWeeklyStatsReducer = (
-  state = { data: null, loading: true, error: false }, 
+  state = { data: [], loading: true, error: false }, 
   action) => {
     switch (action.type) {
       case 'GETTING_WEEKLY_GRAPH':
@@ -72,7 +78,7 @@ const getWeeklyStatsReducer = (
     }
 }
 
-export default combineReducers({
+const appReducer = combineReducers({
   selectedFocusTime: selectFocusTimeReducer,
   selectedBreakTime: selectBreakTimeReducer,
   pomodoroState: updatePomodoroState,
@@ -83,3 +89,12 @@ export default combineReducers({
   updateWeeklyStats: updateWeeklyStatsReducer,
   addSession: addSessionReducer,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'USER_LOGGED_OUT') {
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
+
+export default rootReducer;

@@ -14,7 +14,7 @@ pomodoroController.get(
   passport.authenticate('jwt', {session: false}),
   (req, res) => {
     const userid = req.user._id;
-    
+    console.log('GETTING BERRIES')
     User.findById(userid, function(err, result) {
       if (err) {
         res.send(err);
@@ -51,6 +51,7 @@ pomodoroController.get(
   '/weeklyGraph',
   passport.authenticate('jwt', {session: false}),
   async (req, res) => {
+    console.log("GETTING WEEEKLY GRAPH")
     try {
       let user = await User.findById(req.user._id);
       res.json( user.weeklyGraph );

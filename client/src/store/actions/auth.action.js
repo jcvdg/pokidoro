@@ -33,6 +33,7 @@ export const logout = () => async (dispatch) => {
   dispatch({ type: "LOGGING_OUT" });
   try {
     // AuthApi.logout();
+    dispatch({ type: "USER_LOGGED_OUT"});
     dispatch({ type: "LOGOUT_SUCCESS" });
   } catch (e) {
     console.log(e);

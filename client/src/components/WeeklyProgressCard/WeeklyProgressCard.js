@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react';
 import './WeeklyProgressCard.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { getBerriesCount, getWeeklyStats } from '../../store/actions/index';
+import { getWeeklyStats } from '../../store/actions/index';
 
 const WeeklyProgressCard = () => {
+  const user = useSelector((state) => state.authReducer.authData);
   const weeklyPokemons = useSelector((state) => state.getWeeklyStats.data);
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(getWeeklyStats());
+    if (user) dispatch(getWeeklyStats());
   },[])
 
   const displayPokemons = () => {
+    if (!user) return;
+
     return weeklyPokemons.map( pokemon => {
       return (
         <div key={pokemon._id}>
@@ -25,7 +28,7 @@ const WeeklyProgressCard = () => {
     <div className="WeeklyProgressCard">
       <div className='imageContainer'>
         <div className='weeklyCollections'>
-          {displayPokemons()}
+          { displayPokemons() }
         </div>
       </div>
     </div>

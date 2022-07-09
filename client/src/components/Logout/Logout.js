@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/actions/auth.action';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const Logout = () => {
   const dispatch = useDispatch();
 
   dispatch(logout());
-
 
   return (
     <div>

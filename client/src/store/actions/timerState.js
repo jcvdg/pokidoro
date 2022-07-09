@@ -1,4 +1,5 @@
 export const startFocusSession = () => {
+  console.log('start pomodoro focus session')
   return {
     type: 'FOCUS_SESSION_START'
   };

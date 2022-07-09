@@ -3,7 +3,7 @@ import TimeDisplay from '../TimeDisplay/TimeDisplay';
 import TimerOptions from '../TimerOptions/TimerOptions';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { pomodoroFocusTime, pomodoroBreakTime } from '../../store/actions';
+import { pomodoroFocusTime, pomodoroBreakTime, getBerriesCount } from '../../store/actions';
 import './PomodoroCard.css';
 // import musicIcon from '../img/music.svg'
 
@@ -13,13 +13,16 @@ const defaultFocusOption = 1;
 const defaultBreakOption = 0;
 
 const PomodoroCard = (props) => {
-  // const [timer, setTimer] = React.useState(null);
-  // const [focusSessionTime, setFocusSessionTime] = useState(focusOptions[1]*60);
-  // const [breakSessionTime, setBreakSessionTime] = useState(breakOptions[0]*60);
-
+  const user = useSelector((state) => state.authReducer.authData);
   const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
   const berryCount = useSelector((state) => state.berriesCount.berryCount);
+  
   const dispatch = useDispatch()
+
+  // on initial load, update actions
+  useEffect(() => {
+    if (user) dispatch(getBerriesCount());
+  },[]);
 
   const onSelectFocus = (data) => {
     dispatch(pomodoroFocusTime(data))

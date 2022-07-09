@@ -11,6 +11,7 @@ const authReducer = (state = { authData: null, loading: false, error: false}, ac
       return { ...state, loading: true, error: false }
     case "LOGOUT_SUCCESS":
       localStorage.removeItem("profile");
+      
       return { ...state, authData: null, loading: false, error: false }
     case "LOGOUT_FAIL":
       return { ...state, loading: false, error: true };

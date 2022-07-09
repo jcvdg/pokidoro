@@ -1,15 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+
 import './DisplayPokemon.css'
 import pokeball from '../../assets/img/pokeball.png';
+
 const DisplayPokemon = () => {
-const pomodoroState = useSelector((state) => state.pomodoroState);
-const surpriseEvent = useSelector((state) => state.getEvent.data);
-  
+  const pomodoroState = useSelector((state) => state.pomodoroState);
+  const surpriseEvent = useSelector((state) => state.getEvent.data);
+
   return (
     <div className="DisplayPokemon">
       <div className="image">
-        { pomodoroState === 'FOCUS_SESSION_START'
+        { pomodoroState === 'FOCUS_SESSION_START' || pomodoroState === 'DEFAULT'
           ? <div>
               <img src={pokeball} alt="pokeball" className="pokeball"/></div>
           : <div className='pokemon'>
@@ -28,7 +30,7 @@ const surpriseEvent = useSelector((state) => state.getEvent.data);
         className="message"
         style={{ display: pomodoroState !== 'FOCUS_SESSION_COMPLETE' ? "none" : "block" }}
       >
-        {surpriseEvent.message}
+        {surpriseEvent?.message}
       </div>
     </div>
   )

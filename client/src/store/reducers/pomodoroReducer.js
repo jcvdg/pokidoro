@@ -1,4 +1,4 @@
-export const selectFocusTimeReducer = (state = 4, action) => {
+export const selectFocusTimeReducer = (state = 5, action) => {
   switch (action.type) {
     case 'SELECTED_FOCUS_TIME':
       console.log('focus reducer------ ', state, '  now ', action.payload)
@@ -7,7 +7,7 @@ export const selectFocusTimeReducer = (state = 4, action) => {
       return state;
     }
 }
-export const selectBreakTimeReducer = (state = 5, action) => {
+export const selectBreakTimeReducer = (state = 2, action) => {
   switch (action.type) {
     case 'SELECTED_BREAK_TIME':
       console.log('break reducer:::::: ', state, '  now ', action.payload)
