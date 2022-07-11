@@ -7,15 +7,15 @@ const updateDataController = express.Router();
 
 // update user's weekly stats
 updateDataController.put(
-  '/weeklystats/:focustime/:breaktime/:taskscompleted/:cycle',
+  '/weeklystats',
   passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     try {
       const userid = req.user._id;
-      const focusTime = Number(req.params.focustime);
-      const breakTime = Number(req.params.breaktime);
-      const taskCompleted = Number(req.params.taskscompleted); 
-      const cycle = Number(req.params.cycle); 
+      const focusTime = req.body.focusTime || 0;
+      const breakTime = req.body.breakTime || 0;
+      const taskCompleted = req.body.taskCompleted || 0; 
+      const cycle = req.body.cycle || 0; 
    
       // const options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
@@ -39,8 +39,8 @@ updateDataController.put(
                 sessionCount: day.sessionCount += 1,
                 cycleCount: day.cycleCount += cycle,
                 taskCompletionCount: day.taskCompletionCount += taskCompleted,
-                totalFocusTime: day.totalFocusTime += focusTime*60*1000,
-                totalBreakTime: day.totalBreakTime += breakTime*60*1000,
+                totalFocusTime: day.totalFocusTime += focusTime,
+                totalBreakTime: day.totalBreakTime += breakTime,
               };
 
               // if a record for today was found, set this to false so that a new dailystats for today isn't created and added
@@ -61,9 +61,9 @@ updateDataController.put(
           date: new Date(),
           sessionCount: 1,
           cycleCount: 0,
-          taskCompletionCount: 0,
-          totalFocusTime: 0,
-          totalBreakTime: 0,
+          taskCompletionCount: taskCompleted,
+          totalFocusTime: focusTime,
+          totalBreakTime: breakTime,
         };
 
         user.weeklyStats.push(weeklyStats);
@@ -71,22 +71,22 @@ updateDataController.put(
 
       // save changes
       await user.save();
-      res.json(user);
+      res.status(200);
     } catch (e) {
       console.error(e.message);
     }
   }
 );
 
-// 
+// Update session
 updateDataController.post(
-  '/stats/:cycle',
+  '/stats',
   passport.authenticate('jwt', {session: false}),
   async (req, res) => {
     try {
       const userid = req.user._id;
-      const cycleCount = req.params.cycle;
-      const newSession = req.body;
+      const cycleCount = req.body.cycles;
+      const newSession = req.body.sessionData;
       const options = { 
         upsert: true, 
         new: true, 
@@ -100,7 +100,7 @@ updateDataController.post(
       
       // find document matching user & date:
       //    if none found, create a new document for the date
-      const dailySession = await MonthlySessions.findOneAndUpdate({ userId: '62b53d565effc13d8230a2d8' }, {}, options);
+      const dailySession = await MonthlySessions.findOneAndUpdate({ userId: req.user._id }, {}, options);
 
       // add new session data to the document
       dailySession.totalSessionCount = dailySession.totalSessionCount + 1;
@@ -111,7 +111,7 @@ updateDataController.post(
       // new document:
       // user.startDate = monthStartDate;
 
-      res.json(dailySession);
+      res.status(200);
     } catch (e) {
       console.error(e.message);
     }
@@ -143,7 +143,7 @@ const test = async () => {
     console.error(e.message);
   }
 }
-test();
+// test();
 
 // TO REMOVE
 const update = async () => {

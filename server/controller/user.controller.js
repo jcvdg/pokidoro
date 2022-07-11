@@ -88,7 +88,7 @@ userController.post(
         generateServerErrorCode(res, 500, e, SOME_THING_WENT_WRONG);
       }
     };
-  };
+  }
 );
 
 /**
@@ -131,5 +131,19 @@ userController.post(
     }
   }
 );
+
+// TO DO
+// Logout
+// userController.post(
+//   '/logout',
+//   passport.authenticate('jwt', { session: false }),
+//   (req, res) => {
+//     req.logout(function(err) {
+//       if (err) { console.log(err); }
+//       // res.redirect('/');
+//       res.json({message: "logout success"})
+//     });
+//   } 
+// );
 
 export default userController;

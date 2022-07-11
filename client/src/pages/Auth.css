@@ -1,0 +1,76 @@
+.Auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+}
+
+.Auth > div {
+  display: flex;
+}
+
+.Auth .CenterContainer {
+  height: 30rem;
+}
+
+.Auth .top, 
+.Auth .bottom {
+    width: 55%;
+}
+
+.Auth .top {
+  margin-top: 1.5rem;
+}
+
+.title > h1 {
+  font-size: 3rem;
+  /* color: rgb(235, 212, 63); */
+  color: rgba(168, 230 , 255, 0.94);
+  text-shadow: 0 2px 8px rgba(54, 54, 54, 0.613);
+}
+
+.title > h6{
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    color: rgba(3, 18, 71, 1);
+}
+
+.Auth .bottom {
+  padding-top: 2rem;
+}
+  
+  .authForm > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+  .Auth h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .authForm input {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.25);  
+    box-shadow: var(--buttonShadow);
+    height: 2rem;
+    margin: 0.3rem;
+    padding: 1rem;
+  }
+
+.signupToggle {
+  margin-top: 0.5rem;
+}
+
+.signupToggle span {
+  align-self: flex-end;
+}
+
+.Auth button {
+  margin: 1.5rem 0;
+}

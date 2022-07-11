@@ -1,0 +1,36 @@
+.TimerOptions .sessionType {
+  margin-bottom: 3px;
+  font-size: 0.8rem;
+}
+
+.TimerOptions .timeSelector {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.TimerOptions button {
+  border-style: none;
+  padding: 0.3rem 1rem;
+  background-color: var(--buttonBgSecondary);
+  /* color: #2a2d39; */
+  border-right: none;
+}
+
+.TimerOptions button:hover {
+    background-color: var(--buttonHover);
+    cursor: pointer;
+  }
+
+  .TimerOptions button:first-child {
+    border-radius: 1rem 0 0 1rem;
+    padding-left: 1.2rem;
+  }
+
+  .TimerOptions button:last-child {
+    border-radius: 0 1rem 1rem 0;
+    padding-right: 1.2rem;
+  }
+
+  .TimerOptions .active {
+    background-color: var(--buttonHover);
+  }

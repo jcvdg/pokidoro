@@ -1,7 +1,7 @@
 import React from 'react';
 import './Home.css';
-import PomodoroCard from '../components/PomodoroCard';
-import WeeklyProgressCard from '../components/WeeklyProgressCard';
+import PomodoroCard from '../components/PomodoroCard/PomodoroCard';
+import WeeklyProgressCard from '../components/WeeklyProgressCard/WeeklyProgressCard';
 
 
 const Home = () => {
