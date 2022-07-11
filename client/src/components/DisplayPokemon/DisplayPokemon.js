@@ -5,6 +5,7 @@ import './DisplayPokemon.css'
 import pokeball from '../../assets/img/pokeball.png';
 import { BERRY } from '../../constants';
 import types from '../../store/actionTypes';
+import { BERRY_IMG_URL } from '../../constants';
 
 const DisplayPokemon = () => {
   const pomodoroState = useSelector((state) => state.pomodoroState);
@@ -18,7 +19,7 @@ const DisplayPokemon = () => {
               <img src={pokeball} alt="pokeball" className="pokeball"/></div>
           : <div className='pokemon'>
               <img 
-                src={surpriseEvent.image} 
+                src={surpriseEvent.event === BERRY ? BERRY_IMG_URL : surpriseEvent.image} 
                 alt={ surpriseEvent.event === BERRY ? "berry" : `${surpriseEvent.pokemonName}`}
                 style={
                   { width: surpriseEvent.event === BERRY ? 'auto' : 'auto', 
