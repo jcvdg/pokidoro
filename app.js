@@ -6,6 +6,8 @@ import logger from 'winston';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import path from 'path';
+
 import { applyPassportStrategy } from './store/passport.js';
 import { userController, pomodoroController, updateDataController } from './controller/index.js';
 import { populatePokemons } from './store/populatePokemons.js';
@@ -43,6 +45,14 @@ applyPassportStrategy(passport);
 app.use('/', userController);
 app.use('/', pomodoroController);
 app.use('/', updateDataController);
+
+//
+const dirname = path.resolve();
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(dirname, '/client/build')));
+
+  app.get('*', (req, res) => res.sendFile(path.resolve(dirname, 'client', 'build', 'index.html')));
+}
 
 // Start Server here
 const PORT = process.env.PORT || 8080;
