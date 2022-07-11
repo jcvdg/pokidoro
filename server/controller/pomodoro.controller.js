@@ -1,12 +1,17 @@
 import express from 'express';
 import passport from 'passport';
 import User, { Pokemons } from '../models/index.js';
-
+import { 
+  BERRY_URL,
+  GET_BERRIES,
+  GET_POKEMON,
+  BERRY,
+  POKEMON,
+  EVOLVE
+} from '../store/constant.js';
 const pomodoroController = express.Router();
 const BERRIES_TO_EVOLVE = 4;
 const NUMBER_OF_POKEMONS = 151;
-// const BERRY_URL = 'https://cdn2.bulbagarden.net/upload/thumb/1/18/Razz_Berry_Winter_Fest_Artwork_Winter_Fest_Artwork.png/105px-Razz_Berry_Winter_Fest_Artwork_Winter_Fest_Artwork.png';
-const BERRY_URL = 'https://cdn2.bulbagarden.net/upload/3/32/Dream_Razz_Berry_Sprite.png';
 
 // get the amount of berries user has
 pomodoroController.get(
@@ -78,14 +83,14 @@ pomodoroController.put(
       
       let user = await User.findById(req.user._id).populate("pokemons");
       // check if user has enough berries to evolve a pokemon
-      if (user.berries < BERRIES_TO_EVOLVE) eventLimit = events['GET_POKEMON'];
+      if (user.berries < BERRIES_TO_EVOLVE) eventLimit = events[GET_POKEMON];
       const randomEvent= Math.floor(Math.random() * eventLimit);
       
       let result = {};
-      if (randomEvent< events['GET_BERRIES']) {
+      if (randomEvent< events[GET_BERRIES]) {
         result = await getBerries(user, Number(req.params.focustime));
         // console.log('get berries ', result);
-      } else if (randomEvent < events['GET_POKEMON']) {
+      } else if (randomEvent < events[GET_POKEMON]) {
         result = await getPokemon(user);
         // console.log('get pokemon ', result);
       } else {
@@ -116,14 +121,14 @@ const getBerries = async (user, time) => {
         message: `You got ${berries} berries!`,
         image: BERRY_URL,
         berries: user.berries,
-        event: 'BERRY',
+        event: BERRY,
       };
     } else {
       return {
         message: `You got ${berries} berry!`,
         image: BERRY_URL,
         berries: user.berries,
-        event: 'BERRY',
+        event: BERRY,
       };
     }
   } catch (e) {
@@ -158,7 +163,7 @@ const getPokemon = async (user) => {
       message: `You've caught ${pokemonObject.name}!`,
       image: pokemonObject.image.large,
       berries: user.berries,
-      event: 'POKEMON',
+      event: POKEMON,
       pokemonName: pokemonObject.name,
     };
   } catch (e) {
@@ -199,7 +204,7 @@ const evolvePokemon = async (user) => {
       message: `Your ${userPokemonThatCanEvolve[pokemonIndexToEvolveFrom].name} has evolved ${evolvedPokemonObject.name}!`,
       image: evolvedPokemonObject.image.large,
       berries: user.berries,
-      event: 'EVOLVE',
+      event: EVOLVE,
       pokemonName: evolvedPokemonObject.name,
     };
   } catch (e) {

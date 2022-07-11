@@ -1,42 +1,43 @@
 import * as AuthApi from '../../api/AuthRequest';
+import types from '../actionTypes';
 
 export const logIn = (formData) => async (dispatch) => {
-  dispatch({ type: "AUTH_START" })
+  dispatch({ type: types.AUTH_START })
   try {
     console.log(formData)
     // const data = {yes:"yes"};
     const { data } = await AuthApi.logIn(formData);
     console.log(data);
-    dispatch({ type: "AUTH_SUCCESS", data: data });
+    dispatch({ type: types.AUTH_SUCCESS, data: data });
   } catch (e) {
     console.log(e);
-    dispatch({ type: "AUTH_FAIL" });
+    dispatch({ type: types.AUTH_FAIL });
   }
 };
 
 export const signUp = (formData) => async (dispatch) => {
-  dispatch({ type: "AUTH_START" })
+  dispatch({ type: types.AUTH_START })
   try {
     console.log(formData)
     // const data = {yes:"yes"};
     const { data } = await AuthApi.signUp(formData);
     console.log(data);
 
-    dispatch({ type: "AUTH_SUCCESS", data: data });
+    dispatch({ type: types.AUTH_SUCCESS, data: data });
   } catch (e) {
     console.log(e);
-    dispatch({ type: "AUTH_FAIL" });
+    dispatch({ type: types.AUTH_FAIL });
   }
 };
 
 export const logout = () => async (dispatch) => {
-  dispatch({ type: "LOGGING_OUT" });
+  dispatch({ type: types.LOGGING_OUT });
   try {
     // AuthApi.logout();
-    dispatch({ type: "USER_LOGGED_OUT"});
-    dispatch({ type: "LOGOUT_SUCCESS" });
+    dispatch({ type: types.USER_LOGGED_OUT}); //reset redux
+    dispatch({ type: types.LOGOUT_SUCCESS });
   } catch (e) {
     console.log(e);
-    dispatch({ type: "LOGOUT_FAIL" });
+    dispatch({ type: types.LOGOUT_FAIL });
   }
 };

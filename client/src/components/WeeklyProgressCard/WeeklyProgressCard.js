@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './WeeklyProgressCard.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { getWeeklyStats } from '../../store/actions/index';
+import { getWeeklyStats } from '../../store/actions/getData';
 
 const WeeklyProgressCard = () => {
   const user = useSelector((state) => state.authReducer.authData);

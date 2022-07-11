@@ -1,19 +1,20 @@
+import types from '../actionTypes';
+
 const authReducer = (state = { authData: null, loading: false, error: false}, action) => {
   switch(action.type) {
-    case "AUTH_START":
+    case types.AUTH_START:
       return { ...state, loading: true, error: false };
-    case "AUTH_SUCCESS":
+    case types.AUTH_SUCCESS:
       localStorage.setItem("profile", JSON.stringify({ ...action?.data }));
       return { ...state, authData: action.data, loading: false, error: false };
-    case "AUTH_FAIL":
+    case types.AUTH_FAIL:
         return { ...state, loading: false, error: true };
-    case "LOGGING_OUT":
+    case types.LOGGING_OUT:
       return { ...state, loading: true, error: false }
-    case "LOGOUT_SUCCESS":
+    case types.LOGOUT_SUCCESS:
       localStorage.removeItem("profile");
-      
       return { ...state, authData: null, loading: false, error: false }
-    case "LOGOUT_FAIL":
+    case types.LOGOUT_FAIL:
       return { ...state, loading: false, error: true };
     default:
       return state;

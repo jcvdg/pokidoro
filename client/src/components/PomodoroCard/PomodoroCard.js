@@ -3,20 +3,22 @@ import TimeDisplay from '../TimeDisplay/TimeDisplay';
 import TimerOptions from '../TimerOptions/TimerOptions';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { pomodoroFocusTime, pomodoroBreakTime, getBerriesCount } from '../../store/actions';
+import { pomodoroFocusTime, pomodoroBreakTime } from '../../store/actions/pomodoroControl';
+import { getBerriesCount } from '../../store/actions/getData'
 import './PomodoroCard.css';
+import { BERRY_IMG_URL } from '../../constants';
 // import musicIcon from '../img/music.svg'
 
 const focusOptions = [15,25,35,45];
 const breakOptions = [5,10,15,20];
-const defaultFocusOption = 1;
+const defaultFocusOption = 0;
 const defaultBreakOption = 0;
 
 const PomodoroCard = (props) => {
   const user = useSelector((state) => state.authReducer.authData);
   const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
   const berryCount = useSelector((state) => state.berriesCount.berryCount);
-  
+
   const dispatch = useDispatch()
 
   // on initial load, update actions
@@ -70,8 +72,8 @@ const PomodoroCard = (props) => {
             </div>
           </div> */}
           <div className='berries'>
-            <div>{berryCount}</div>
-            <img src="https://cdn2.bulbagarden.net/upload/3/32/Dream_Razz_Berry_Sprite.png" alt="berry"/>
+            <div>{ berryCount }</div>
+            <img src={ BERRY_IMG_URL } alt="berry"/>
           </div>
         </div>
       </div>

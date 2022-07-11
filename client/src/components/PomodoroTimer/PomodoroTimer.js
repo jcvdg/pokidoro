@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import useSound from 'use-sound';
 //import actions
 import { startFocusSession, endFocusSession, startBreakSession, endBreakSession, defaultState } from '../../store/actions/timerState';
-import { event, addSessionStats, updateWeeklyStats } from '../../store/actions/index';
+import { event, addSessionStats, updateWeeklyStats } from '../../store/actions/pomodoroEvent';
 // import css, assets and components
 import './PomodoroTimer.css'
 import TimeDisplay from '../TimeDisplay/TimeDisplay';
