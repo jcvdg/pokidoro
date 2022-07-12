@@ -14,6 +14,14 @@ import { populatePokemons } from './store/populatePokemons.js';
 
 dotenv.config();
 
+// Init an Express App.
+const app = express();
+
+// Use your dependencies here
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 // Connect to the database
 // for debugging if connection succeeded or failed
 mongoose.connect(process.env.DB_CONN, { useNewUrlParser: true });
@@ -29,14 +37,6 @@ db.on('error', (err) => {
 // Fetches pokemon data from pokeapi
 // should only be executed once when the project is first run.
 populatePokemons();
-
-// Init an Express App.
-const app = express();
-
-// Use your dependencies here
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // Apply strategy to passport
 applyPassportStrategy(passport);
