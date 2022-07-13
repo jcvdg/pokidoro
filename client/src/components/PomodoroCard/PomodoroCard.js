@@ -9,6 +9,8 @@ import './PomodoroCard.css';
 import { BERRY_IMG_URL } from '../../constants';
 // import musicIcon from '../img/music.svg'
 
+import { connect } from 'react-redux';
+
 const focusOptions = [15,25,35,45];
 const breakOptions = [5,10,15,20];
 const defaultFocusOption = 0;
@@ -16,7 +18,7 @@ const defaultBreakOption = 0;
 
 const PomodoroCard = (props) => {
   const user = useSelector((state) => state.authReducer.authData);
-  const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
+  // const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
   const berryCount = useSelector((state) => state.berriesCount.berryCount);
 
   const dispatch = useDispatch()
@@ -27,10 +29,10 @@ const PomodoroCard = (props) => {
   },[]);
 
   const onSelectFocus = (data) => {
-    dispatch(pomodoroFocusTime(data))
+    dispatch(props.pomodoroFocusTime(data))
   }
   const onSelectBreak = (data) => {
-    dispatch(pomodoroBreakTime(data))
+    dispatch(props.pomodoroBreakTime(data))
   }
 
 
@@ -80,7 +82,7 @@ const PomodoroCard = (props) => {
       <div className="centerSection">
         <div className="timer">
           <TimeDisplay
-            timeInSeconds={selectedFocusTime*60}
+            timeInSeconds={props.selectedFocusTime*60}
           />
         </div>
         <div className="button">
@@ -100,4 +102,29 @@ const PomodoroCard = (props) => {
   );
 }
 
-export default PomodoroCard;
+function mapStateToProps(state) {
+  return {
+    selectedFocusTime: state.selectedFocusTime,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    pomodoroFocusTime: (focusTime) => {
+      const action = {
+        type: 'SELECTED_FOCUS_TIME',
+        payload: focusTime
+      };
+      return dispatch(action)
+    },
+    pomodoroBreakTime: (breakTime) => {
+      const action = {
+        type: 'SELECTED_BREAK_TIME',
+        payload: breakTime
+      };
+      return dispatch(action)
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PomodoroCard);
