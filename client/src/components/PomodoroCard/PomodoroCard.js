@@ -3,22 +3,19 @@ import TimeDisplay from '../TimeDisplay/TimeDisplay';
 import TimerOptions from '../TimerOptions/TimerOptions';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { pomodoroFocusTime, pomodoroBreakTime } from '../../store/actions/pomodoroControl';
+import { pomodoroFocusTime, pomodoroBreakTime, selectedFocusOption, selectedBreakOption } from '../../store/actions/pomodoroControl';
 import { getBerriesCount } from '../../store/actions/getData'
 import './PomodoroCard.css';
 import { BERRY_IMG_URL } from '../../constants';
 // import musicIcon from '../img/music.svg'
 
-import { connect } from 'react-redux';
-
-const focusOptions = [15,25,35,45];
-const breakOptions = [5,10,15,20];
-const defaultFocusOption = 0;
-const defaultBreakOption = 0;
+const focusOptions = [5,25,35,45];
+const breakOptions = [2,10,15,20];
 
 const PomodoroCard = (props) => {
   const user = useSelector((state) => state.authReducer.authData);
-  // const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
+  const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
+  const selectedBreakTime = useSelector((state) => state.selectedBreakTime);
   const berryCount = useSelector((state) => state.berriesCount.berryCount);
 
   const dispatch = useDispatch()
@@ -29,12 +26,11 @@ const PomodoroCard = (props) => {
   },[]);
 
   const onSelectFocus = (data) => {
-    dispatch(props.pomodoroFocusTime(data))
+    dispatch(pomodoroFocusTime(data))
   }
   const onSelectBreak = (data) => {
-    dispatch(props.pomodoroBreakTime(data))
+    dispatch(pomodoroBreakTime(data))
   }
-
 
   return (
     <div className="PomodoroCard">
@@ -43,14 +39,14 @@ const PomodoroCard = (props) => {
           <TimerOptions
             label='Focus Time'
             options={focusOptions}
-            selected={defaultFocusOption}
-            onSelect={(onSelectFocus)}
+            selected = {selectedFocusTime}
+            onSelect={onSelectFocus}
           />
           <TimerOptions
             label='Break Time'
             options={breakOptions}
-            selected={defaultBreakOption}
-            onSelect={(onSelectBreak)}
+            selected = {selectedBreakTime}
+            onSelect={onSelectBreak}
           />
         </div>
         {/* <div className="soundscape">
@@ -82,7 +78,7 @@ const PomodoroCard = (props) => {
       <div className="centerSection">
         <div className="timer">
           <TimeDisplay
-            timeInSeconds={props.selectedFocusTime*60}
+            timeInSeconds={selectedFocusTime*60}
           />
         </div>
         <div className="button">
@@ -102,29 +98,4 @@ const PomodoroCard = (props) => {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    selectedFocusTime: state.selectedFocusTime,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    pomodoroFocusTime: (focusTime) => {
-      const action = {
-        type: 'SELECTED_FOCUS_TIME',
-        payload: focusTime
-      };
-      return dispatch(action)
-    },
-    pomodoroBreakTime: (breakTime) => {
-      const action = {
-        type: 'SELECTED_BREAK_TIME',
-        payload: breakTime
-      };
-      return dispatch(action)
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PomodoroCard);
+export default PomodoroCard;
