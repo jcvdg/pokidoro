@@ -10,7 +10,8 @@ import { applyPassportStrategy } from './store/passport.js';
 import { userController, pomodoroController, updateDataController } from './controller/index.js';
 import { populatePokemons } from './store/populatePokemons.js';
 
-dotenv.config();
+// dotenv.config();
+dotenv.config({ path: '../.env' });
 
 // Connect to the database
 // for debugging if connection succeeded or failed

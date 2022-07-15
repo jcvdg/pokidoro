@@ -32,6 +32,17 @@ const PomodoroTimer = (props) => {
   const [play, audioOptions] = useSound(soundRainStorm, {loop: true});
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // 
+  // let displayTime = (runTimer || timerPause) ? runningTime : focus ? selectedFocusTime*60 : selectedBreakTime*60;
+  // let buttonText = runTimer ? "Pause" : runningTime > 0 ? "Resume" : "Start Break";
+   const getButtonText = () => {
+    return runTimer ? "Pause" : runningTime > 0 ? "Resume" : "Start Break";
+   }
+
+  const getDisplayTime = () => {
+    return (runTimer || timerPause) ? runningTime : focus ? selectedFocusTime*60 : selectedBreakTime*60
+  }
+
   // on component load, start timer countdown
   useEffect( () => {
     startTimer();
@@ -171,14 +182,14 @@ const PomodoroTimer = (props) => {
       </div>
       <DisplayPokemon />
       <div>
-        <TimeDisplay timeInSeconds={ (runTimer || timerPause) ? runningTime : focus ? selectedFocusTime*60 : selectedBreakTime*60}/>
+        <TimeDisplay timeInSeconds={ getDisplayTime() }/>
       </div>
       <div 
         className="button"
         onClick={ handleTimerControl }
         style={{ display: "flex" }}
       >
-        {runTimer ? "Pause" : runningTime > 0 ? "Resume" : "Start Break" }
+        { getButtonText() }
       </div>
       {/* <div
         className="button"

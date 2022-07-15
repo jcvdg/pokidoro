@@ -7,7 +7,9 @@ import {
 } from './pomodoroStatesReducer.js';
 import {
   selectFocusTimeReducer,
-  selectBreakTimeReducer
+  selectBreakTimeReducer,
+  selectedFocusOptionReducer,
+  selectedBreakOptionReducer
 } from './pomodoroControlReducer'
 import { 
   berriesCountReducer, 

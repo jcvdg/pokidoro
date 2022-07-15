@@ -11,23 +11,26 @@ const DisplayPokemon = () => {
   const pomodoroState = useSelector((state) => state.pomodoroState);
   const surpriseEvent = useSelector((state) => state.getEvent.data);
 
+  const displayImage = () => {
+    return pomodoroState === types.FOCUS_SESSION_START || pomodoroState === types.DEFAULT
+    ? <div>
+        <img src={pokeball} alt="pokeball" className="pokeball"/></div>
+    : <div className='pokemon'>
+        <img 
+          src={surpriseEvent.event === BERRY ? BERRY_IMG_URL : surpriseEvent.image} 
+          alt={ surpriseEvent.event === BERRY ? "berry" : `${surpriseEvent.pokemonName}`}
+          style={
+            { width: surpriseEvent.event === BERRY ? 'auto' : 'auto', 
+              height: surpriseEvent.event === BERRY ? '8rem' : '100%',
+            }}
+        />
+      </div>
+  }
+
   return (
     <div className="DisplayPokemon">
       <div className="image">
-        { pomodoroState === types.FOCUS_SESSION_START || pomodoroState === types.DEFAULT
-          ? <div>
-              <img src={pokeball} alt="pokeball" className="pokeball"/></div>
-          : <div className='pokemon'>
-              <img 
-                src={surpriseEvent.event === BERRY ? BERRY_IMG_URL : surpriseEvent.image} 
-                alt={ surpriseEvent.event === BERRY ? "berry" : `${surpriseEvent.pokemonName}`}
-                style={
-                  { width: surpriseEvent.event === BERRY ? 'auto' : 'auto', 
-                    height: surpriseEvent.event === BERRY ? '8rem' : '100%',
-                  }}
-              />
-            </div>
-        }
+        { displayImage() }
       </div>
       <div 
         className="message"
