@@ -20,17 +20,17 @@ const PomodoroCard = (props) => {
 
   const dispatch = useDispatch()
 
-  // on initial load, update actions
-  useEffect(() => {
-    if (user) dispatch(getBerriesCount());
-  },[]);
-
   const onSelectFocus = (data) => {
     dispatch(pomodoroFocusTime(data))
   }
   const onSelectBreak = (data) => {
     dispatch(pomodoroBreakTime(data))
   }
+
+  // on initial load, update action
+  useEffect(() => {
+    if (user) dispatch(getBerriesCount());
+  },[]);
 
   return (
     <div className="PomodoroCard">

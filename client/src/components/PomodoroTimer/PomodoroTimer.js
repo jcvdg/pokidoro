@@ -32,9 +32,6 @@ const PomodoroTimer = (props) => {
   const [play, audioOptions] = useSound(soundRainStorm, {loop: true});
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 
-  // let displayTime = (runTimer || timerPause) ? runningTime : focus ? selectedFocusTime*60 : selectedBreakTime*60;
-  // let buttonText = runTimer ? "Pause" : runningTime > 0 ? "Resume" : "Start Break";
    const getButtonText = () => {
     return runTimer ? "Pause" : runningTime > 0 ? "Resume" : "Start Break";
    }
@@ -42,37 +39,19 @@ const PomodoroTimer = (props) => {
   const getDisplayTime = () => {
     return (runTimer || timerPause) ? runningTime : focus ? selectedFocusTime*60 : selectedBreakTime*60
   }
-
-  // on component load, start timer countdown
-  useEffect( () => {
-    startTimer();
-  },[])
-
+  
   const startTimer = () => {
     console.log('start', pomodoroState)
     if (focus) {
-        setRunningTime(selectedFocusTime);
-        dispatch(startFocusSession());
+      setRunningTime(selectedFocusTime);
+      dispatch(startFocusSession());
     } else {
         setRunningTime(selectedBreakTime);
         dispatch(startBreakSession());
-    }
-    setRunTimer(true);
+      }
+      setRunTimer(true);
     setTimerPause(false);
   };
-
-  useEffect(() => {
-    let interval = 0;
-
-    if (runTimer) {
-        interval = setInterval(updateTime, 1000);
-        setTimer(interval);
-    }
-
-    return () => {
-        clearInterval(interval);
-    };
-  }, [runTimer, runningTime]);
 
   const updateTime = () => {
     if (runningTime > 0) {
@@ -85,31 +64,34 @@ const PomodoroTimer = (props) => {
 
     // when timer ends
     if (runningTime === 0) {
+      // focus session end
       if (focus)  {
-          dispatch(endFocusSession())
-          dispatch(updateWeeklyStats(
-            { 
-              focusTime: selectedFocusTime,
-              taskCompleted: 0,
-              cycle: 0,
-            }
-          ));
+        dispatch(endFocusSession())
+        dispatch(updateWeeklyStats(
+          { 
+            focusTime: selectedFocusTime,
+            taskCompleted: 0,
+            cycle: 0,
+          }
+        ));
       } else {
-          let cycles = 0;
-          dispatch(endBreakSession());
-          dispatch(addSessionStats(
-            { 
-              sessionDateTime: new Date(), 
-              focusTime: selectedFocusTime,
-              breakTime: selectedBreakTime,
-            }
-          ), cycles);
-          dispatch(updateWeeklyStats(
-            { 
-              breakTime: selectedBreakTime,
-            }
-          ));
-          navigateHome();
+        let cycles = 0;
+        dispatch(endBreakSession());
+        dispatch(addSessionStats(
+          { 
+            sessionDateTime: new Date(), 
+            focusTime: selectedFocusTime,
+            breakTime: selectedBreakTime,
+          }
+        ), cycles);
+        dispatch(updateWeeklyStats(
+          { 
+            breakTime: selectedBreakTime,
+          }
+        ));
+
+        // redirect back to home page
+        navigateHome();
       }
       setRunTimer(false);
       setFocus(!focus);
@@ -151,6 +133,26 @@ const PomodoroTimer = (props) => {
     dispatch(defaultState());
     return navigate("/");
   }
+   
+  // on component load, start timer countdown
+  useEffect( () => {
+    startTimer();
+  },[])
+
+  // update timer time
+  useEffect(() => {
+    let interval = 0;
+
+    if (runTimer) {
+        interval = setInterval(updateTime, 1000);
+        setTimer(interval);
+    }
+
+    return () => {
+        clearInterval(interval);
+    };
+  }, [runTimer, runningTime]);
+  
 
   return (
     <div className='PomodoroTimer'>
