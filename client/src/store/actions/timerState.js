@@ -26,6 +26,7 @@ export const startBreakSession = () => {
 }
 
 export const endBreakSession = () => {
+  console.log('in action for break session complete')
   return {
     type: types.BREAK_SESSION_COMPLETE
   };
