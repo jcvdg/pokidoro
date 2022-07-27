@@ -3,28 +3,22 @@ import TimeDisplay from '../TimeDisplay/TimeDisplay';
 import TimerOptions from '../TimerOptions/TimerOptions';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { pomodoroFocusTime, pomodoroBreakTime } from '../../store/actions/pomodoroControl';
+import { pomodoroFocusTime, pomodoroBreakTime, selectedFocusOption, selectedBreakOption } from '../../store/actions/pomodoroControl';
 import { getBerriesCount } from '../../store/actions/getData'
 import './PomodoroCard.css';
 import { BERRY_IMG_URL } from '../../constants';
 // import musicIcon from '../img/music.svg'
 
-const focusOptions = [15,25,35,45];
-const breakOptions = [5,10,15,20];
-const defaultFocusOption = 0;
-const defaultBreakOption = 0;
+const focusOptions = [5,25,35,45];
+const breakOptions = [2,10,15,20];
 
 const PomodoroCard = (props) => {
   const user = useSelector((state) => state.authReducer.authData);
   const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
+  const selectedBreakTime = useSelector((state) => state.selectedBreakTime);
   const berryCount = useSelector((state) => state.berriesCount.berryCount);
 
   const dispatch = useDispatch()
-
-  // on initial load, update actions
-  useEffect(() => {
-    if (user) dispatch(getBerriesCount());
-  },[]);
 
   const onSelectFocus = (data) => {
     dispatch(pomodoroFocusTime(data))
@@ -33,6 +27,10 @@ const PomodoroCard = (props) => {
     dispatch(pomodoroBreakTime(data))
   }
 
+  // on initial load, update action
+  useEffect(() => {
+    if (user) dispatch(getBerriesCount());
+  },[]);
 
   return (
     <div className="PomodoroCard">
@@ -41,14 +39,14 @@ const PomodoroCard = (props) => {
           <TimerOptions
             label='Focus Time'
             options={focusOptions}
-            selected={defaultFocusOption}
-            onSelect={(onSelectFocus)}
+            selected = {selectedFocusTime}
+            onSelect={onSelectFocus}
           />
           <TimerOptions
             label='Break Time'
             options={breakOptions}
-            selected={defaultBreakOption}
-            onSelect={(onSelectBreak)}
+            selected = {selectedBreakTime}
+            onSelect={onSelectBreak}
           />
         </div>
         {/* <div className="soundscape">

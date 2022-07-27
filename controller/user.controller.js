@@ -2,8 +2,8 @@ import express from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
-import User from '../models/index.js';
 import dotenv from 'dotenv';
+import User from '../models/index.js';
 import {
   generateHashedPassword,
   generateServerErrorCode,
@@ -18,7 +18,7 @@ import {
 } from '../store/constant.js';
 
 dotenv.config();
-// Express Router is a class which helps us to create router handlers. It also can extend this routing to handle validation, handle 404 or other errors, etc.
+
 const userController = express.Router();
 
 function createUser(email, password) {
@@ -58,8 +58,8 @@ userController.get(
  * Register a user
  */
 userController.post(
-  '/register', 
-  registerValidation, 
+  '/register',
+  registerValidation,
   async (req, res) => {
     const errorsAfterValidation = validationResult(req);
     if (!errorsAfterValidation.isEmpty()) {
@@ -75,7 +75,7 @@ userController.post(
           await createUser(email, password);
           // Sign token
           const newUser = await User.findOne({ email });
-          const userId = newUser.id;
+          // const userId = newUser.id;
           const token = jwt.sign({ email }, process.env.PASSPORT_SECRET, { expiresIn: 10000000 });
 
           const userToReturn = { ...newUser.toJSON(), ...{ token } };
@@ -95,9 +95,9 @@ userController.post(
  * POST/
  * Login a user
  */
- userController.post(
-  '/login', 
-  loginValidation, 
+userController.post(
+  '/login',
+  loginValidation,
   async (req, res) => {
     const errorsAfterValidation = validationResult(req);
     if (!errorsAfterValidation.isEmpty()) {
@@ -143,7 +143,7 @@ userController.post(
 //       // res.redirect('/');
 //       res.json({message: "logout success"})
 //     });
-//   } 
+//   }
 // );
 
 export default userController;

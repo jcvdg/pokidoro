@@ -13,13 +13,15 @@ import backIcon from '../../assets/img/Back-Vector.svg';
 import musicIcon from '../../assets/img/music.svg';
 import musicOffIcon from '../../assets/img/musicoff.svg';
 import soundRainStorm from '../../assets/sounds/heavy-rain-storm-sounds.mp3';
+// import constants
+import types from '../../store/actionTypes';
+import { PREFETCH_TIME, MINUTE_TO_SECONDS } from '../../constants';
 
 const PomodoroTimer = (props) => {
-  const user = useSelector((state) => state.authReducer.authData);
+  // const user = useSelector((state) => state.authReducer.authData);
   const selectedFocusTime = useSelector((state) => state.selectedFocusTime);
   const selectedBreakTime = useSelector((state) => state.selectedBreakTime);
   const pomodoroState = useSelector((state) => state.pomodoroState);
-
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
@@ -32,73 +34,41 @@ const PomodoroTimer = (props) => {
   const [play, audioOptions] = useSound(soundRainStorm, {loop: true});
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // on component load, start timer countdown
-  useEffect( () => {
-    startTimer();
-  },[])
+  // determine text to display
+  const getButtonText = () => {
+    return runTimer ? "Pause" : runningTime > 0 ? "Resume" : "Start Break";
+  }
 
+  const getDisplayTime = () => {
+    return (runTimer || timerPause) ? runningTime : focus ? selectedFocusTime * MINUTE_TO_SECONDS : selectedBreakTime * MINUTE_TO_SECONDS
+  }
+  
+  // pomodoro timer functions
   const startTimer = () => {
-    console.log('start', pomodoroState)
     if (focus) {
-        setRunningTime(selectedFocusTime);
-        dispatch(startFocusSession());
+      setRunningTime(selectedFocusTime);
+      dispatch(startFocusSession());
     } else {
-        setRunningTime(selectedBreakTime);
-        dispatch(startBreakSession());
+      setRunningTime(selectedBreakTime);
+      dispatch(startBreakSession());
     }
+    console.log('start', pomodoroState)
     setRunTimer(true);
-    setTimerPause(false);
+    setTimerPause(false); // timerPause = !runTimer
   };
-
-  useEffect(() => {
-    let interval = 0;
-
-    if (runTimer) {
-        interval = setInterval(updateTime, 1000);
-        setTimer(interval);
-    }
-
-    return () => {
-        clearInterval(interval);
-    };
-  }, [runTimer, runningTime]);
 
   const updateTime = () => {
     if (runningTime > 0) {
       // pre-fetch the data
-      if( focus && runningTime === 4) {
+      if( focus && runningTime === PREFETCH_TIME) {
         dispatch(event(selectedFocusTime));
       }
       setRunningTime(runningTime => runningTime - 1);
-    }
-
-    // when timer ends
-    if (runningTime === 0) {
+    } else {
       if (focus)  {
-          dispatch(endFocusSession())
-          dispatch(updateWeeklyStats(
-            { 
-              focusTime: selectedFocusTime,
-              taskCompleted: 0,
-              cycle: 0,
-            }
-          ));
+        dispatch(endFocusSession())
       } else {
-          let cycles = 0;
-          dispatch(endBreakSession());
-          dispatch(addSessionStats(
-            { 
-              sessionDateTime: new Date(), 
-              focusTime: selectedFocusTime,
-              breakTime: selectedBreakTime,
-            }
-          ), cycles);
-          dispatch(updateWeeklyStats(
-            { 
-              breakTime: selectedBreakTime,
-            }
-          ));
-          navigateHome();
+        dispatch(endBreakSession());
       }
       setRunTimer(false);
       setFocus(!focus);
@@ -106,6 +76,37 @@ const PomodoroTimer = (props) => {
     }
   };
 
+  // stores user session stats
+  const updateFocusSessionStats = () => {
+    dispatch(updateWeeklyStats( 
+      { 
+        focusTime: selectedFocusTime,
+        taskCompleted: 0,
+        cycle: 0,
+      }
+    ));
+  }
+  
+  const updateBreakSessionStats = () => {
+    dispatch(updateWeeklyStats( 
+      { 
+        breakTime: selectedBreakTime,
+      }
+    ));
+  }
+  
+  const addUserSessionStats = () => {
+    let cycles = 0;
+    dispatch(addSessionStats( // take this out into its own function
+      { 
+        sessionDateTime: new Date(), 
+        focusTime: selectedFocusTime,
+        breakTime: selectedBreakTime,
+      }
+    ), cycles); 
+  }
+
+  // pomodoro timer controls
   const pauseTimer = () => {
     clearInterval(timer);
     setRunTimer(!runTimer);
@@ -113,21 +114,17 @@ const PomodoroTimer = (props) => {
   };
 
   const handleTimerControl = () => {
-    if (runningTime > 0) {
-      pauseTimer();
-    } else if ( runningTime === 0) {
-      startTimer();
-    }
+    runningTime > 0 ? pauseTimer() : startTimer();
   }
 
   const handleMusicClick = () => {
     if (isPlaying) {
       audioOptions.pause();
-      console.log('stop')
+      // console.log('stop')
       setIsPlaying(!isPlaying);
     } else {
       play();
-      console.log('play')
+      // console.log('play')
       setIsPlaying(!isPlaying);
     }
   }
@@ -140,6 +137,37 @@ const PomodoroTimer = (props) => {
     dispatch(defaultState());
     return navigate("/");
   }
+   
+  // on component load, start timer countdown
+  useEffect( () => {
+    startTimer();
+  },[])
+
+  // update timer time
+  useEffect(() => {
+    let tempInterval;
+    if (runTimer) {
+      tempInterval = setInterval(updateTime, 1000);
+      setTimer(tempInterval);
+    }
+
+    return () => {
+        clearInterval(tempInterval);
+    };
+  }, [runTimer, runningTime]);
+
+  // update user data based on timer state
+  useEffect(() => {
+    if (pomodoroState === types.FOCUS_SESSION_COMPLETE) {
+      updateFocusSessionStats();
+    } 
+    if (pomodoroState === types.BREAK_SESSION_COMPLETE) {
+      updateBreakSessionStats();
+      addUserSessionStats();
+      navigateHome();
+    }
+  }, [pomodoroState])
+  
 
   return (
     <div className='PomodoroTimer'>
@@ -171,14 +199,14 @@ const PomodoroTimer = (props) => {
       </div>
       <DisplayPokemon />
       <div>
-        <TimeDisplay timeInSeconds={ (runTimer || timerPause) ? runningTime : focus ? selectedFocusTime*60 : selectedBreakTime*60}/>
+        <TimeDisplay timeInSeconds={ getDisplayTime() }/>
       </div>
       <div 
         className="button"
         onClick={ handleTimerControl }
         style={{ display: "flex" }}
       >
-        {runTimer ? "Pause" : runningTime > 0 ? "Resume" : "Start Break" }
+        { getButtonText() }
       </div>
       {/* <div
         className="button"

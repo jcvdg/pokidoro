@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import './TimerOptions.css';
 
-const TimerOptions = ({ label, options, selected, onSelect }) => {
-	const [clickedId, setClickedId] = useState(options[selected]);
+const TimerOptions = ({ label, options, onSelect, selected }) => {
+	const [clickedId, setClickedId] = useState(selected);
 
-	const renderOptions = options.map( (option) => {
+	const renderOptions = options.map( (option,i) => {
 		return (
 			<button 
 				key={ option }
 				className={ `${option === clickedId ? "active": ""}` }
-				onClick={ () => {
-					setClickedId(option)
-					onSelect(clickedId)
-				}}
+				onClick={ () => 
+					{
+						setClickedId(option)
+						onSelect(option)
+					}
+				}
 			>
 				{ option }
 			</button>

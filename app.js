@@ -12,7 +12,16 @@ import { applyPassportStrategy } from './store/passport.js';
 import { userController, pomodoroController, updateDataController } from './controller/index.js';
 import { populatePokemons } from './store/populatePokemons.js';
 
-dotenv.config();
+// dotenv.config();
+dotenv.config({ path: '../.env' });
+
+// Init an Express App.
+const app = express();
+
+// Use your dependencies here
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Connect to the database
 // for debugging if connection succeeded or failed
@@ -29,14 +38,6 @@ db.on('error', (err) => {
 // Fetches pokemon data from pokeapi
 // should only be executed once when the project is first run.
 populatePokemons();
-
-// Init an Express App.
-const app = express();
-
-// Use your dependencies here
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // Apply strategy to passport
 applyPassportStrategy(passport);
@@ -57,5 +58,5 @@ if (process.env.NODE_ENV === 'production') {
 // Start Server here
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${8080}!`);
+  console.log(`Server is running on port ${PORT}!`);
 });

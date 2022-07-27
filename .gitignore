@@ -1,6 +1,6 @@
 package-lock.json
 node_modules/
-models/Character.js
 .vscode
 .env
 .eslintrc
+.client/build/
